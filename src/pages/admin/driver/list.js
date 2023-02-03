@@ -246,7 +246,7 @@ export default function DriversListPage() {
   return (
     <>
       <Head>
-        <title> Жолоочийн жагсаалт </title>
+        <title> Жолоочийgн жагсаалт </title>
       </Head>
 
       <Container maxWidth={false} sx={{ padding: '10px !important' }}>

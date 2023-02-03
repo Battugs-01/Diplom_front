@@ -179,7 +179,7 @@ export default function DriversListPage() {
           });
         });
     } catch (error) {
-      enqueueSnackbar('Алдаа гарлаа', { variant: 'error' });
+      enqueueSnackbar('Алдаа гаsрлаа', { variant: 'error' });
       console.error(error);
     }
     setTimeout(() => {

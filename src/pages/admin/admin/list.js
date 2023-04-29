@@ -31,7 +31,7 @@ const TABLE_HEAD = [
   { label: 'Нэр', align: 'left' },
   { id: 'group_id', label: 'Эрх', align: 'left' },
   { label: 'Цахим шуудан', align: 'left' },
-  { id: 'created_date', label: 'Үүсгэсэн огноо', align: 'left' },
+  { id: 'phone', label: 'Утас', align: 'left' },
   { label: 'Үйлдэл', align: 'center' },
 ];
 
@@ -40,7 +40,6 @@ const TABLE_HEAD = [
 AdminListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
-
 export default function AdminListPage() {
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -98,10 +97,11 @@ export default function AdminListPage() {
     setLoaderState(true);
     try {
       await axiosInstance
-        .post('/admin/list', params)
+        .get('/user?role=super_admin&role=admin')
         .then((response) => {
-          setDataList(response?.data?.data?.rows || []);
+          setDataList(response?.data?.data || []);
           setTotal(response?.data?.data?.count || 0);
+          console.log(response, 'ressss');
         })
         .catch((error) => {
           enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
@@ -116,22 +116,18 @@ export default function AdminListPage() {
       setLoaderState(false);
     }, 500);
   };
-
+  console.log(dataList, 'dataList');
   // sending data using post request
   const handleSaveData = async (values) => {
-    let action = 'add';
+    let action = 'user';
     if (dialogStatus === 'update') {
       action = 'update';
     }
     try {
-      await axiosInstance.post(`admin/${action}`, values).then((response) => {
-        if (response?.data?.action === 1) {
-          enqueueSnackbar(response?.data?.message ? response?.data?.message : 'Амжилттай.');
-          setDialogStatus('');
-          getAdminList();
-        } else {
-          enqueueSnackbar(response?.data?.message, { variant: 'warning' });
-        }
+      await axiosInstance.post(`/${action}`, values).then((response) => {
+        enqueueSnackbar(response?.data?.message ? response?.data?.message : 'Амжилттай.');
+        setDialogStatus('');
+        getAdminList();
       });
     } catch (error) {
       console.error(error);
@@ -225,7 +221,6 @@ export default function AdminListPage() {
                   rowCount={total}
                   onSort={onSort}
                 />
-
                 <TableBody>
                   {dataList &&
                     dataList.map((row, index) =>
@@ -234,7 +229,7 @@ export default function AdminListPage() {
                           key={index}
                           row={row}
                           rowQueue={{ index: index, rowsPerPage: rowsPerPage, page: page }}
-                          onDeleteRow={() => handleDeleteRow(row.admin_id)}
+                          onDeleteRow={() => handleDeleteRow(row.id)}
                           onEditRow={() => handleUpdate(row)}
                           onViewRow={() => handleView(row)}
                         />

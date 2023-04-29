@@ -122,6 +122,7 @@ export default function ViewDialog({ open, onClose, row }) {
     phoneList = values.phones.split(',');
   }
 
+  console.log(onClose, 'asdfgd');
   // rendering---------------------------------------------------------------------------------------------
 
   return (

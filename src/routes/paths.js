@@ -166,9 +166,14 @@ export const PATH_DASHBOARD = {
     list: (params) => path(ROOTS_ADMIN, `/trip/${params}`),
     view: (id) => path(ROOTS_ADMIN, `/trip/detail/${id}`),
   },
+  delivered: {
+    root: path(ROOTS_ADMIN, '/delivered'),
+    list: (params) => path(ROOTS_ADMIN, `/delivered/${params}`),
+    view: (id) => path(ROOTS_ADMIN, `/delivered/detail/${id}`),
+  },
   booking: {
-    root: path(ROOTS_ADMIN, '/booking'),
-    call: path(ROOTS_ADMIN, '/booking/call'),
+    root: path(ROOTS_ADMIN, '/admin'),
+    call: path(ROOTS_ADMIN, '/controlpanel/charts'),
   },
   news: {
     root: path(ROOTS_ADMIN, '/news'),

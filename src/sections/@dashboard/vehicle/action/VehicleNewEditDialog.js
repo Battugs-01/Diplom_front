@@ -187,6 +187,7 @@ export default function VehicleNewEditDialog({
         .post('/model/list', { make_id: values?.make_id?.make_id || null })
         .then((response) => {
           setModelList(response?.data?.data?.rows || []);
+          console.log('model', response?.data?.data?.rows);
         })
         .catch((error) => {
           enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {

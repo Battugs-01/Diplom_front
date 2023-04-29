@@ -68,6 +68,7 @@ export default function EditDialog({ open, onClose, row, onRefresh }) {
         if (res?.data?.action === 1) {
           let data = res?.data?.data?.rows || [];
           setBankList(data);
+          console.log(res?.data?.data?.rows, 'bank');
         } else {
           enqueueSnackbar(res?.data?.message, { variant: 'warning' });
         }
@@ -201,6 +202,7 @@ export default function EditDialog({ open, onClose, row, onRefresh }) {
     [setValue]
   );
 
+  console.log(typeof acceptedFiles, 'tuguuuu');
   // rendering ---------------------------------------------------------------------------------
 
   return (

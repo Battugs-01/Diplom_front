@@ -23,7 +23,7 @@ ComingSoonPage.getLayout = (page) => <CompactLayout>{page}</CompactLayout>;
 // ----------------------------------------------------------------------
 
 export default function ComingSoonPage() {
-  const { days, hours, minutes, seconds } = useCountdown(new Date('04/01/2023 00:30'));
+  const { days, hours, minutes, seconds } = useCountdown(new Date('05/01/2023 00:30'));
 
   return (
     <>

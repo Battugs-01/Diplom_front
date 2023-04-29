@@ -5,7 +5,8 @@ import axios from '../utils/axios';
 import localStorageAvailable from '../utils/localStorageAvailable';
 //
 import { isValidToken, setSession } from './utils';
-
+import jwt_decode from 'jwt-decode';
+import { useRouter } from 'next/router';
 // ----------------------------------------------------------------------
 
 // NOTE:
@@ -70,18 +71,28 @@ export function AuthProvider({ children }) {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = storageAvailable ? localStorage.getItem('accessToken') : '';
+      const token = localStorage.getItem('token');
 
-      if (accessToken && isValidToken(accessToken)) {
-        setSession(accessToken);
+      // if (token && isValidToken(token)) {
+      //   const user = jwt_decode(token);
+      //   user.displayName = user.email || '';
+      //   user.role = user.role || '';
+      //   dispatch({
+      //     type: 'INITIAL',
+      //     payload: {
+      //       isAuthenticated: true,
+      //       user,
+      //     },
+      //   });
+      //   router.push('/admin/admin/list');
+      //   return;
+      // }
 
-        // const response = await axios.get('/api/account/my-account');
-
-        // const { user } = response.data;
-        const response = await axios.get('/myAccount');
-        const { user } = response.data;
+      if (token && isValidToken(token)) {
+        setSession(token);
+        const user = jwt_decode(token);
         user.displayName = user.email || '';
-        user.role = user?.group?.name || '';
+        user.role = user.role || '';
 
         dispatch({
           type: 'INITIAL',
@@ -110,7 +121,7 @@ export function AuthProvider({ children }) {
       });
     }
   }, [storageAvailable]);
-
+  const router = useRouter();
   useEffect(() => {
     initialize();
   }, [initialize]);
@@ -121,9 +132,8 @@ export function AuthProvider({ children }) {
       email,
       password,
     });
-    const { token, user } = response.data;
-    user.displayName = user.email || '';
-    user.role = user?.group?.name || '';
+    const { token, success } = response.data;
+    const user = jwt_decode(token);
     setSession(token);
 
     dispatch({

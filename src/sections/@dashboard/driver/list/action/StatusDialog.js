@@ -70,6 +70,7 @@ export default function StatusDialog({ open, onClose, id, changeStatus, onRefres
       const response = await axiosInstance.post('/driver/status/log', fetchTerm);
       let data = response?.data?.data?.rows || [];
       setDriverStatusList(data);
+      console.log('asfsa', response?.data?.data?.rows);
     } catch (error) {
       enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
         variant: 'warning',

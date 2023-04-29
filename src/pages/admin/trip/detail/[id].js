@@ -38,7 +38,7 @@ export default function TripDetailPage() {
 
   // each person trip detail state
   const [tripDetail, setTripDetail] = useState();
-
+  console.log(tripDetail);
   // fetching trip detail
   const getTripDetail = useCallback(async () => {
     try {
@@ -47,6 +47,7 @@ export default function TripDetailPage() {
       });
       let data = response?.data?.data || [];
       setTripDetail(data);
+      console.log(data, 'drip');
     } catch (error) {
       enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
         variant: 'warning',

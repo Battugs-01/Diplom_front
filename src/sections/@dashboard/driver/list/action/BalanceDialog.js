@@ -62,7 +62,7 @@ export default function BalanceDialog({ open, onClose, driver_id, onRefresh, bal
       driver_id,
       balance: data.balance,
     };
-
+    console.log(user, 'tugsuData');
     try {
       const res = await axiosInstance.post('/addMoneyDriver', fetchTerm);
       if (res?.data?.action === 1) {

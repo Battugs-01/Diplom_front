@@ -40,11 +40,8 @@ const navConfig = [
     subheader: 'Удирдлага',
     items: [
       { title: 'Хяналтын самбар', path: PATH_DASHBOARD.controlpanel.charts, icon: ICONS.analytics },
-      { title: 'Админы жагсаалт', path: PATH_DASHBOARD.admin.list, icon: ICONS.user },
-      { title: 'Жолоочийн жагсаалт', path: PATH_DASHBOARD.driver.list, icon: ICONS.menuItem },
-      { title: 'Захиалга', path: PATH_DASHBOARD.booking.call, icon: ICONS.trip },
-      { title: 'Аялал', path: PATH_DASHBOARD.trip.root, icon: ICONS.route },
-      { title: 'Тээврийн хэрэгсэл', path: PATH_DASHBOARD.vehicle.root, icon: ICONS.ecommerce },
+      // { title: 'Админы жагсаалт', path: PATH_DASHBOARD.admin.list, icon: ICONS.user },
+      { title: 'Захиалгын жагсаалт', path: PATH_DASHBOARD.trip.root, icon: ICONS.lock },
     ],
   },
   // GENERAL
@@ -80,6 +77,7 @@ const navConfig = [
   //         { title: 'account', path: PATH_DASHBOARD.user.account },
   //       ],
   //     },
+  //
   //     E-COMMERCE
   //     // INVOICE
   //     {

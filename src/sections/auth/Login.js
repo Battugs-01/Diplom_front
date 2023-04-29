@@ -46,7 +46,7 @@ export default function Login() {
     <RootStyle>
       {mdUp && (
         <SectionStyle>
-          <Image visibleByDefault disabledEffect src="/assets/illustrations/loginBg2.png" alt="login" />
+          <Image visibleByDefault disabledEffect src="/assets/illustrations/Sysco.png" alt="login" />
         </SectionStyle>
       )}
 

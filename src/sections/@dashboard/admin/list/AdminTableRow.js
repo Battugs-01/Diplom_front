@@ -5,7 +5,7 @@ import { useState } from 'react';
 // @mui
 import { TableRow, TableCell, Typography, MenuItem, IconButton, Button } from '@mui/material';
 // utils
-import { fDateTimeSuffix } from 'src/utils/formatTime';
+
 // components
 import Label from 'src/components/label';
 import Iconify from '../../../../components/iconify';
@@ -27,7 +27,7 @@ AdminTableRow.propTypes = {
 
 export default function AdminTableRow({ row, selected, onEditRow, onViewRow, onDeleteRow, rowQueue }) {
   // extracting data
-  const { first_name, last_name, group, email, contact_no, created_date } = row;
+  const { name, role, email, phone } = row;
 
   // extracting data
   const { index, rowsPerPage, page } = rowQueue;
@@ -61,12 +61,11 @@ export default function AdminTableRow({ row, selected, onEditRow, onViewRow, onD
 
         <TableCell>
           <Typography variant="subtitle2" noWrap>
-            {first_name ? first_name?.substring(0, 1) + '. ' : ''}
-            {last_name}
+            {name}
           </Typography>
         </TableCell>
 
-        <TableCell align="left">{group?.desc}</TableCell>
+        <TableCell align="left">{role}</TableCell>
 
         <TableCell align="left">
           <Label variant="soft" color="success">
@@ -76,7 +75,7 @@ export default function AdminTableRow({ row, selected, onEditRow, onViewRow, onD
 
         <TableCell align="left">
           <Label variant="soft" color="info">
-            {fDateTimeSuffix(created_date)}
+            {phone}
           </Label>
         </TableCell>
 

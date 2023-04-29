@@ -14,8 +14,8 @@ module.exports = withTM({
   env: {
     // HOST
     // HOST_API_KEY: 'https://api-dev-minimal-v4.vercel.app',
-    HOST_API_KEY: 'https://dev.1950.mn/api',
-    HOST_API_KEY_PROD: 'https://dev.1950.mn/api',
+    HOST_API_KEY: 'http://172.16.151.180:5000',
+    HOST_API_KEY_PROD: 'http://172.16.151.180:5000',
     HOST_FILE_KEY: 'https://dev.1950.mn',
     HOST_API_KEY_TEST: 'http://43.231.112.191:8070/v1',
     // MAPBOX

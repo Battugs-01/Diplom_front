@@ -29,21 +29,7 @@ DriverTableRow.propTypes = {
 export default function DriverTableRow({ row, rowQueue, refresh, handleFilterQueryVehicle, handleFilterQueryTrip }) {
   const { user } = useAuthContext();
 
-  const {
-    driver_id,
-    last_name,
-    name,
-    phone,
-    registration_date,
-    car_count,
-    bank_name,
-    account_number,
-    bank_account_holder_name,
-    balance,
-    status,
-    image,
-    licence_plate,
-  } = row;
+  const { driver_id, name, phone, car_count, status, email, image, role } = row;
 
   // extracting row queue
   const { index, rowsPerPage, page } = rowQueue;
@@ -126,44 +112,25 @@ export default function DriverTableRow({ row, rowQueue, refresh, handleFilterQue
         <TableCell sx={{ display: 'flex', alignItems: 'center' }} align="left">
           <Avatar alt={name} src={image ? process.env.HOST_FILE_KEY + image : ''} sx={{ mr: 1 }} />
           <Typography variant="subtitle2" noWrap>
-            {last_name ? last_name?.substring(0, 1) + '. ' : ''}
             {name}
           </Typography>
         </TableCell>
 
         <TableCell align="left">
-          <Label variant="soft" color="info">
-            {fDateTimeSuffix(registration_date)}
+          <Label variant="soft" color="success">
+            {`Жолооч`}
           </Label>
         </TableCell>
 
-        <TableCell align="left">{phone}</TableCell>
-
-        <TableCell align="center">{car_count}</TableCell>
-
-        <TableCell align="left">{licence_plate ? licence_plate : '-'}</TableCell>
-
         <TableCell align="left">
-          {bank_name && account_number && bank_account_holder_name ? (
-            <>
-              {bank_name}
-              {account_number ? ', ' + account_number : ''}
-              {bank_account_holder_name ? ', ' + bank_account_holder_name : ''}
-            </>
-          ) : (
-            '-'
-          )}
+          <Label variant="soft" color="success">
+            {email}
+          </Label>
         </TableCell>
 
-        <TableCell align="left">{balance ? '₮' + fCurrency(balance) : '₮0'}</TableCell>
-
         <TableCell align="left">
-          <Label
-            variant="soft"
-            color={status === 'active' ? 'success' : 'default'}
-            sx={{ textTransform: 'capitalize' }}
-          >
-            {status === 'active' ? 'Идэвхтэй' : 'Идэвхгүй'}
+          <Label variant="soft" color="info">
+            {phone}
           </Label>
         </TableCell>
 

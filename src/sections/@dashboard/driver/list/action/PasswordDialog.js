@@ -76,6 +76,7 @@ export default function PasswordDialog({ open, onClose, driver_id, onRefresh }) 
     }
   };
 
+  console.log(typeof password, 'driver');
   return (
     <>
       {driver_id && (

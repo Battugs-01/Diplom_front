@@ -6,6 +6,7 @@ import { Card, Table, Button, TableBody, Container, TableContainer, Stack, Typog
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
+import { DriverNewEditDialog } from 'src/sections/@dashboard/driver/list/action';
 import Iconify from '../../../components/iconify';
 import { TableSkeleton } from '../../../components/table';
 import { useSnackbar } from '../../../components/snackbar';
@@ -27,15 +28,11 @@ import { useRouter } from 'next/router';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { label: '№', align: 'center', width: '30px' },
+  { label: '№', align: 'center', width: 40 },
   { label: 'Нэр', align: 'left' },
-  { id: 'registration_date', label: 'Бүртгүүлсэн огноо', align: 'left' },
-  { label: 'Утас', align: 'left' },
-  { id: 'car_count', label: 'Машины тоо', align: 'center' },
-  { label: 'АУД', align: 'left' },
-  { label: 'Банкны мэдээлэл', align: 'left' },
-  { id: 'balance', label: 'Хэтэвч', align: 'left' },
-  { id: 'status', label: 'Төлөв', align: 'left' },
+  { id: 'group_id', label: 'Эрх', align: 'left' },
+  { label: 'Цахим шуудан', align: 'left' },
+  { id: 'phone', label: 'Утас', align: 'left' },
   { label: 'Үйлдэл', align: 'center' },
 ];
 
@@ -70,7 +67,8 @@ export default function DriversListPage() {
 
   // full length of data list
   const [listLength, setListLength] = useState(0);
-
+  const [dialogStatus, setDialogStatus] = useState('');
+  const [currentRow, setCurrentRow] = useState({});
   // table's max height state
   const [maxHeight, setMaxHeight] = useState(0);
 
@@ -162,13 +160,13 @@ export default function DriversListPage() {
       },
     };
     setLoaderState(true);
-    let fetchUrl = 'getDriverList';
+    let fetchUrl = 'user';
     if (!buttonStatus) {
       fetchUrl = 'deletedDriverList';
     }
     try {
       await axiosInstance
-        .post(`/${fetchUrl}`, params)
+        .get(`/${fetchUrl}?role=driver`)
         .then((response) => {
           setDataList(response?.data?.data || []);
           setListLength(response?.data?.count || 0);
@@ -179,7 +177,7 @@ export default function DriversListPage() {
           });
         });
     } catch (error) {
-      enqueueSnackbar('Алдаа гаsрлаа', { variant: 'error' });
+      enqueueSnackbar('Алдаа гарлаа', { variant: 'error' });
       console.error(error);
     }
     setTimeout(() => {
@@ -187,16 +185,10 @@ export default function DriversListPage() {
     }, 500);
   };
 
-  // handling archive list
-  const onClickArchive = async () => {
-    setButtonStatus(false);
+  const handleCreate = async () => {
+    setDialogStatus('create');
+    setCurrentRow({});
   };
-
-  // handling driver list
-  const onClickDriver = async () => {
-    setButtonStatus(true);
-  };
-
   // handling driver vehicle filter to vehicle list page
   const handleFilterQueryVehicle = async (name) => {
     push(PATH_DASHBOARD.vehicle.list(name || 'default'));
@@ -217,6 +209,16 @@ export default function DriversListPage() {
     setCarCountSign((show) => !show);
   };
 
+  const handleUpdate = async (row) => {
+    setDialogStatus('update');
+    setCurrentRow(row);
+  };
+
+  // handling view func
+  const handleView = async (row) => {
+    setDialogStatus('view');
+    setCurrentRow(row);
+  };
   // handling less or greater balance filter input
   const handleLessOrGreaterThanBalance = () => {
     setShowBalanceSign((show) => !show);
@@ -241,36 +243,21 @@ export default function DriversListPage() {
     getDriversList();
   };
 
+  // console.log(row, '');
   // rendering-------------------------------------------------------------------------------------------
-
   return (
     <>
       <Head>
-        <title> Жолоочийgн жагсаалт </title>
+        <title> Жолоочийн жагсаалт </title>
       </Head>
 
       <Container maxWidth={false} sx={{ padding: '10px !important' }}>
         <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
           <Typography variant="overline">{(!buttonStatus && 'Архивийн жагсаалт') || 'Жолоочийн жагсаалт'}</Typography>
-          {buttonStatus ? (
-            <Button
-              variant="contained"
-              sx={{ minWidth: 160 }}
-              onClick={onClickArchive}
-              startIcon={<Iconify icon="fa-solid:file-archive" />}
-            >
-              Архив
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              sx={{ minWidth: 160 }}
-              onClick={onClickDriver}
-              startIcon={<Iconify icon="material-symbols:format-list-bulleted-rounded" />}
-            >
-              Жолоочид
-            </Button>
-          )}
+
+          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => handleCreate()}>
+            Нэмэх
+          </Button>
         </Stack>
 
         <Card>
@@ -278,10 +265,6 @@ export default function DriversListPage() {
             filterModel={filterModel}
             setFilterModel={setFilterModel}
             onFilterModel={handlingFilterModel}
-            showCarCountSign={showCarCountSign}
-            showBalanceSign={showBalanceSign}
-            onLessOrGreaterThanCarCount={handleLessOrGreaterThanCarCount}
-            onLessOrGreaterThanBalance={handleLessOrGreaterThanBalance}
             clearFilter={handleClearFilter}
           />
 
@@ -302,10 +285,13 @@ export default function DriversListPage() {
                       <DriverTableRow
                         key={index}
                         row={row}
-                        refresh={() => getDriversList()}
-                        handleFilterQueryVehicle={() => handleFilterQueryVehicle(row?.name)}
-                        handleFilterQueryTrip={() => handleFilterQueryTrip(row?.name)}
                         rowQueue={{ index: index, rowsPerPage: rowsPerPage, page: page }}
+                        refresh={() => getDriversList()}
+                        handleUpdate={() => handleUpdate(row)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleUpdate(row)}
+                        onViewRow={() => handleView(row)}
+                        handleFilterQueryTrip={() => handleFilterQueryTrip(row?.name)}
                       />
                     ) : (
                       !isNotFound && <TableSkeleton key={index} sx={{ height: 48 }} />
@@ -313,7 +299,6 @@ export default function DriversListPage() {
                   )}
 
                 <TableEmptyRows height={48} emptyRows={emptyRows(page, rowsPerPage, listLength)} />
-
                 <TableNoData isNotFound={isNotFound} />
               </TableBody>
             </Table>
@@ -333,6 +318,16 @@ export default function DriversListPage() {
           />
         </Card>
       </Container>
+      {(dialogStatus === 'create' || dialogStatus === 'update' || dialogStatus === 'view') && (
+        <DriverNewEditDialog
+          dialogStatus={dialogStatus}
+          currentRow={currentRow}
+          saveData={(values) => handleSaveData(values)}
+          changeDialogStatus={(e) => {
+            setDialogStatus(e);
+          }}
+        />
+      )}
     </>
   );
 }

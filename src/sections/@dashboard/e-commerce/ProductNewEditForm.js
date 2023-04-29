@@ -237,9 +237,7 @@ export default function ProductNewEditForm({ isEdit, currentProduct }) {
                   name="price"
                   label="Regular Price"
                   placeholder="0.00"
-                  onChange={(event) =>
-                    setValue('price', Number(event.target.value), { shouldValidate: true })
-                  }
+                  onChange={(event) => setValue('price', Number(event.target.value), { shouldValidate: true })}
                   InputLabelProps={{ shrink: true }}
                   InputProps={{
                     startAdornment: (

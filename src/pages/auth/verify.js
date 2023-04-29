@@ -34,8 +34,8 @@ export default function VerifyCodePage() {
       </Typography>
 
       <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-        We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below
-        box to verify your email.
+        We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below box to verify your
+        email.
       </Typography>
 
       <AuthVerifyCodeForm />

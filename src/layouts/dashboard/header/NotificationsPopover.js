@@ -43,7 +43,7 @@ export default function NotificationsPopover({ selectItem }) {
   const [openPopover, setOpenPopover] = useState(null);
 
   useEffect(() => {
-    getData();
+    // getData();
   }, []);
 
   async function getData() {
@@ -65,6 +65,7 @@ export default function NotificationsPopover({ selectItem }) {
       .then((res) => {
         let data = res?.data?.data || [];
         setNotifications(data?.rows);
+        console.log('getbook', res?.data?.data);
       })
       .catch((error) => {
         console.log('🚀  NotificationsPopover', error);

@@ -170,6 +170,7 @@ export default function BookingPage() {
       .then((res) => {
         let data = res?.data?.data || [];
         setDrivers(data);
+        console.log('driverList', res?.data?.data);
       })
       .catch((error) => {
         enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
@@ -188,6 +189,7 @@ export default function BookingPage() {
       .then((res) => {
         let data = res?.data?.data || [];
         setVehicleTypeList(data);
+        console.log(res?.data?.data, 'vehicleType');
       })
       .catch((error) => {
         enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
@@ -206,6 +208,7 @@ export default function BookingPage() {
     const { action } = res.data;
     if (action === 1) {
       const data = res?.data?.data;
+      console.log(data, 'dataaaa');
       setAdditionalCost(data?.longDistanceFare || 0);
     }
   }

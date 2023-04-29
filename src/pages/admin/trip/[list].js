@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 // @mui
-import { Card, Container, Table, TableBody, TableContainer, Typography } from '@mui/material';
+import { Card, Container, Table, TableBody, TableContainer, Typography, Grid } from '@mui/material';
 // layouts
 import DashboardLayout from 'src/layouts/dashboard';
 // components
@@ -23,22 +23,44 @@ import axiosInstance from 'src/utils/axios';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 // sections
 import { TripTableRow, TripTableToolbar } from 'src/sections/@dashboard/trip/list';
-
+import { AnalyticsWidgetSummary } from '../../../sections/@dashboard/general/analytics';
+import SvgColor from 'src/components/svg-color/SvgColor';
 // ----------------------------------------------------------------------
-
+const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
+const ICONS = {
+  blog: icon('ic_blog'),
+  cart: icon('ic_cart'),
+  chat: icon('ic_chat'),
+  mail: icon('ic_mail'),
+  user: icon('ic_user'),
+  file: icon('ic_file'),
+  lock: icon('ic_lock'),
+  label: icon('ic_label'),
+  blank: icon('ic_blank'),
+  kanban: icon('ic_kanban'),
+  folder: icon('ic_folder'),
+  banking: icon('ic_banking'),
+  booking: icon('ic_booking'),
+  invoice: icon('ic_invoice'),
+  calendar: icon('ic_calendar'),
+  disabled: icon('ic_disabled'),
+  external: icon('ic_external'),
+  menuItem: icon('ic_menu_item'),
+  ecommerce: icon('ic_ecommerce'),
+  analytics: icon('ic_analytics'),
+  dashboard: icon('ic_dashboard'),
+  trip: icon('ic_trip'),
+  route: icon('ic_route'),
+};
 const TABLE_HEAD = [
-  { label: '№', align: 'center', width: '30px' },
-  { id: 'trip_request_date', label: 'Огноо', align: 'left' },
-  { label: 'Хаяг', align: 'left', width: '240px' },
-  { label: 'Ж/нэр', align: 'left', width: '160px' },
-  { label: 'Ж/утас', align: 'left' },
-  { label: 'Х/нэр', align: 'left' },
+  { label: '№', align: 'center' },
+  { label: 'Х/Овог', align: 'left' },
+  { label: 'Х/Нэр', align: 'left' },
   { label: 'Х/утас', align: 'left' },
-  { label: 'АУД', align: 'left' },
-  { id: 'trip_generate_fare', label: 'Төлбөр', align: 'left' },
-  { id: 'distance', label: 'Км', align: 'left' },
+  { id: 'className', label: 'Тасгийн нэр', align: 'left' },
+  { id: 'start_time', label: 'Эхлэх Огноо', align: 'left', width: '260px' },
+  { id: 'end_time', label: 'Дуусах Огноо', align: 'left', width: '260px' },
   { id: 'active', label: 'Төлөв', align: 'left' },
-  { label: 'Үйлдэл', align: 'center' },
 ];
 
 // ----------------------------------------------------------------------
@@ -121,84 +143,26 @@ export default function TripListPage() {
   }, []);
 
   useEffect(() => {
-    getTripList();
+    getOrderData();
   }, [page, rowsPerPage, order, orderBy, filterModel, filterName, showSign, distanceSign]);
 
   // fetching trip list data
-  async function getTripList() {
-    let fetchTerm = {
-      listQuery: {
-        search: {
-          multi: [
-            {
-              attribute: 'saddress',
-              value: filterModel?.saddress || null,
-              option: 'like',
-              join: false,
-            },
-            {
-              attribute: 'rd.name',
-              value: filterName || null,
-              option: 'like',
-              join: true,
-            },
-            {
-              attribute: 'rd.phone',
-              value: filterModel?.rdPhone || null,
-              option: 'like',
-              join: true,
-            },
-            {
-              attribute: 'ru.phone',
-              value: filterModel?.ruPhone || null,
-              option: 'like',
-              join: true,
-            },
-            {
-              attribute: 'rd.dv.licence_plate',
-              value: filterModel?.licence_plate || null,
-              option: 'like',
-              join: true,
-            },
-            {
-              attribute: 'trip_generate_fare',
-              value: filterModel?.trip_generate_fare || null,
-              option: showSign ? 'greater' : 'less',
-              join: false,
-            },
-            {
-              attribute: 'distance',
-              value: filterModel?.distance || null,
-              option: distanceSign ? 'greater' : 'less',
-              join: false,
-            },
-          ],
-        },
-        limit: rowsPerPage,
-        currentPage: page + 1,
-        sort: {
-          prop: orderBy,
-          order: order === 'asc' ? 'ascending' : 'descending',
-        },
-      },
-    };
-    setLoaderState(true);
-    await axiosInstance
-      .post('/tripList', fetchTerm)
-      .then((response) => {
-        setDataList(response?.data?.data?.rows || []);
-        setTotal(response?.data?.data?.count || 0);
-      })
-      .catch((error) => {
-        enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
-          variant: 'warning',
-        });
-      });
-
-    setTimeout(() => {
-      setLoaderState(false);
-    }, 500);
-  }
+  // async function getTripList() {
+  //   await axiosInstance
+  //     .post('/companyOrder/getOrders', fetchTerm)
+  //     .then((response) => {
+  //       setDataList(response?.data?.data?.rows || []);
+  //       setTotal(response?.data?.data?.count || 0);
+  //     })
+  //     .catch((error) => {
+  //       enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
+  //         variant: 'warning',
+  //       });
+  //     });
+  //   setTimeout(() => {
+  //     setLoaderState(false);
+  //   }, 500);
+  // }
 
   // handling page to trip detail page
   const handleView = async (id) => {
@@ -248,6 +212,62 @@ export default function TripListPage() {
     setDistanceSign((show) => !show);
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
+  async function getData() {
+    getOrderData();
+    setInterval(async () => {
+      getOrderData();
+    }, 5000);
+  }
+  async function getOrderData() {
+    await axiosInstance
+      .get('/order')
+      .then((response) => {
+        setDataList(response?.data?.orders || []);
+        if (localStorage.getItem('total') < response.data.orders.length) {
+          enqueueSnackbar(`Шинэ захиалга ирлээ`, {
+            variant: 'success',
+          });
+          localStorage.setItem('total', response.data.orders.length);
+        }
+        setTotal(response?.data?.orders?.length || 0);
+      })
+      .catch((error) => {
+        enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
+          variant: 'warning',
+        });
+      });
+    setTimeout(() => {
+      setLoaderState(false);
+    }, 50000);
+  }
+  // const array = ['pending', 'confirmed', 'delivered', 'disabled', 'returning', 'returned'];
+  // array.forEach((element) => {
+  //   getOrderData(element);
+  // });
+  // const confirmed = () => {
+  //   console.log('confirmed');
+  // };
+
+  // const delivered = () => {
+  //   console.log('delivered');
+  // };
+
+  // const disabled = () => {
+  //   console.log('cancelled');
+  // };
+
+  // const returning = () => {
+  //   console.log('returning');
+  // };
+
+  // const returned = () => {
+  //   console.log('returned');
+  // };
+
   // rendering ----------------------------------------------------------------------------
 
   return (
@@ -257,7 +277,21 @@ export default function TripListPage() {
       </Head>
 
       <Container maxWidth={false} sx={{ padding: '10px !important' }}>
-        <Typography variant="overline">Аялалын жагсаалт</Typography>
+        <Typography variant="overline">Захиалгын жагсаалт</Typography>
+
+        {/* <Grid container spacing={3}>
+          <Grid item xs={6} sm={6} md={2} onClick={() => getOrderData('pending')}>
+            <AnalyticsWidgetSummary title="Нүд" color="secondary" icon="ant-design:android-filled" />
+          </Grid>
+
+          <Grid item xs={6} sm={6} md={2} onClick={() => getOrderData('confirmed')}>
+            <AnalyticsWidgetSummary title="Чих" color="info" icon="ant-design:apple-filled" />
+          </Grid>
+
+          <Grid item xs={6} sm={6} md={2} onClick={() => getOrderData('delivered')}>
+            <AnalyticsWidgetSummary title="Шүд" color="success" icon="ant-design:windows-filled" />
+          </Grid>
+        </Grid> */}
 
         <Card>
           <TripTableToolbar

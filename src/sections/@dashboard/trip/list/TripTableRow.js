@@ -18,42 +18,69 @@ TripTableRow.propTypes = {
 
 export default function TripTableRow({ row, onViewRow, rowQueue }) {
   // extracting row
-  const { trip_generate_fare, distance, active, saddress, ru, rd, trip_request_date } = row;
+  const { Customer, Category, start_time, end_time } = row;
 
+  const { id, firstname, lastname, phone } = Customer;
+
+  const { name } = Category;
   // extracting rowQueue
   const { index, rowsPerPage, page } = rowQueue;
 
+  // if (name === 'Шүд') {
+  // }
   return (
     <TableRow hover>
       <TableCell align="center">{index + page * rowsPerPage + 1}</TableCell>
 
-      <TableCell align="left">
+      {/* <TableCell align="left">
         <Label variant="soft" color="info" sx={{ textTransform: 'capitalize' }}>
           {fDateTimeSuffix(trip_request_date)}
         </Label>
+      </TableCell> */}
+
+      <TableCell align="left" sx={{ minWidth: 100 }}>
+        {lastname}
       </TableCell>
 
-      <TableCell align="left" sx={{ minWidth: 400 }}>
-        {saddress}
-      </TableCell>
+      <TableCell align="left">{firstname}</TableCell>
 
-      <TableCell align="left">{rd?.name}</TableCell>
+      <TableCell align="left">{phone}</TableCell>
 
-      <TableCell align="left">{rd?.phone}</TableCell>
-
-      <TableCell align="left">{ru?.name}</TableCell>
-
-      <TableCell align="left">{ru?.phone}</TableCell>
-
-      <TableCell align="left" sx={{ minWidth: 120 }}>
-        {rd?.dv?.licence_plate}
-      </TableCell>
-
-      <TableCell align="left">{trip_generate_fare}</TableCell>
-
-      <TableCell align="left">{distance}</TableCell>
+      {/* <TableCell align="left">{name}</TableCell> */}
 
       <TableCell align="left">
+        <Label
+          variant="soft"
+          color={name === 'Шүд' ? 'error' : name === 'Нүд' ? 'success' : 'warning'}
+          sx={{ textTransform: 'capitalize' }}
+        >
+          {name}
+        </Label>
+      </TableCell>
+
+      <TableCell align="left">
+        <Label variant="soft" color="info">
+          {start_time}
+        </Label>
+      </TableCell>
+
+      <TableCell align="left" sx={{ minWidth: 120 }}>
+        <Label variant="soft" color="info">
+          {end_time}
+        </Label>
+      </TableCell>
+
+      <TableCell align="center">
+        <IconButton color="inherit">
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
+      </TableCell>
+
+      {/* <TableCell align="left">{trip_generate_fare}</TableCell> */}
+
+      {/* <TableCell align="left">{distance}</TableCell> */}
+
+      {/* <TableCell align="left">
         <Label
           variant="soft"
           color={active === 'Canceled' ? 'error' : active === 'Finished' ? 'success' : 'warning'}
@@ -61,15 +88,15 @@ export default function TripTableRow({ row, onViewRow, rowQueue }) {
         >
           {active === 'Canceled' ? 'Цуцалсан' : active === 'Finished' ? 'Дэлгэрэнгүй' : 'Зорчигчтой'}
         </Label>
-      </TableCell>
+      </TableCell> */}
 
-      {active === 'Finished' && (
+      {/* {active === 'Finished' && (
         <TableCell align="center">
           <IconButton onClick={() => onViewRow()}>
             <Iconify icon={'bx:trip'} />
           </IconButton>
         </TableCell>
-      )}
+      )} */}
     </TableRow>
   );
 }

@@ -19,16 +19,7 @@ DriverTableToolbar.propTypes = {
 
 // ----------------------------------------------------------------------
 
-export default function DriverTableToolbar({
-  filterModel,
-  setFilterModel,
-  onFilterModel,
-  clearFilter,
-  onLessOrGreaterThanCarCount,
-  onLessOrGreaterThanBalance,
-  showCarCountSign,
-  showBalanceSign,
-}) {
+export default function DriverTableToolbar({ filterModel, setFilterModel, onFilterModel, clearFilter }) {
   // rendering ------------------------------------------------------------------------------------------------
 
   return (
@@ -85,40 +76,6 @@ export default function DriverTableToolbar({
 
       <TextField
         size="small"
-        label="Машины тоогоор..."
-        placeholder={showCarCountSign ? 'ихээр' : 'багаар'}
-        sx={{ maxWidth: 200 }}
-        value={filterModel?.car_count}
-        onChange={(e) => onFilterModel('car_count', e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <IconButton onClick={onLessOrGreaterThanCarCount} edge="start">
-                <Iconify
-                  icon={
-                    showCarCountSign
-                      ? 'material-symbols:keyboard-arrow-up-rounded'
-                      : 'material-symbols:keyboard-arrow-down-rounded'
-                  }
-                />
-              </IconButton>
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <IconButton
-              sx={{ visibility: filterModel?.car_count ? 'visible' : 'hidden' }}
-              onClick={() => {
-                setFilterModel({ ...filterModel, car_count: '' });
-              }}
-            >
-              <Iconify icon={'ic:baseline-clear'} sx={{ color: 'text.disabled', width: 16, height: 16 }} />
-            </IconButton>
-          ),
-        }}
-      />
-
-      <TextField
-        size="small"
         label="АУД-ээр..."
         sx={{ maxWidth: 200 }}
         value={filterModel?.licence_plate}
@@ -134,65 +91,6 @@ export default function DriverTableToolbar({
               sx={{ visibility: filterModel?.licence_plate ? 'visible' : 'hidden' }}
               onClick={() => {
                 setFilterModel({ ...filterModel, licence_plate: '' });
-              }}
-            >
-              <Iconify icon={'ic:baseline-clear'} sx={{ color: 'text.disabled', width: 16, height: 16 }} />
-            </IconButton>
-          ),
-        }}
-      />
-
-      <TextField
-        size="small"
-        label="Дансаар..."
-        sx={{ maxWidth: 200 }}
-        value={filterModel?.account_number}
-        onChange={(e) => onFilterModel('account_number', e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Iconify icon={'eva:search-fill'} sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <IconButton
-              sx={{ visibility: filterModel?.account_number ? 'visible' : 'hidden' }}
-              onClick={() => {
-                setFilterModel({ ...filterModel, account_number: '' });
-              }}
-            >
-              <Iconify icon={'ic:baseline-clear'} sx={{ color: 'text.disabled', width: 16, height: 16 }} />
-            </IconButton>
-          ),
-        }}
-      />
-
-      <TextField
-        size="small"
-        label="Хэтэвчээр..."
-        placeholder={showBalanceSign ? 'ихээр' : 'багаар'}
-        sx={{ maxWidth: 200 }}
-        value={filterModel?.balance}
-        onChange={(e) => onFilterModel('balance', e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <IconButton onClick={onLessOrGreaterThanBalance} edge="start">
-                <Iconify
-                  icon={
-                    showBalanceSign
-                      ? 'material-symbols:keyboard-arrow-up-rounded'
-                      : 'material-symbols:keyboard-arrow-down-rounded'
-                  }
-                />
-              </IconButton>
-            </InputAdornment>
-          ),
-          endAdornment: (
-            <IconButton
-              sx={{ visibility: filterModel?.balance ? 'visible' : 'hidden' }}
-              onClick={() => {
-                setFilterModel({ ...filterModel, balance: '' });
               }}
             >
               <Iconify icon={'ic:baseline-clear'} sx={{ color: 'text.disabled', width: 16, height: 16 }} />

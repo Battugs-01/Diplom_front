@@ -186,6 +186,7 @@ export default function VehicleListPage() {
         .then((response) => {
           setDataList(response?.data?.data?.rows || []);
           setTotal(response?.data?.data?.count || 0);
+          // console.log(response?.data?.data?.rows, 'driverList');
         })
         .catch((error) => {
           enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
@@ -200,7 +201,9 @@ export default function VehicleListPage() {
       setLoaderState(false);
     }, 500);
   };
-
+  console.log(driverList, 'asfd');
+  console.log(markList, 'markaa');
+  console.log(companyList, 'sarkaa');
   // fetching mark list
   const getMarkList = async () => {
     try {
@@ -208,6 +211,7 @@ export default function VehicleListPage() {
         .get('/make/list')
         .then((response) => {
           setMarkList(response?.data?.data?.rows || []);
+          console.log('mar', response?.data?.data?.rows);
         })
         .catch((error) => {
           enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
@@ -227,6 +231,7 @@ export default function VehicleListPage() {
         .get('/driver/list')
         .then((response) => {
           setDriverList(response?.data?.data?.rows || []);
+          console.log(response?.data?.data?.rows, 'driver');
         })
         .catch((error) => {
           enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
@@ -246,6 +251,7 @@ export default function VehicleListPage() {
         .get('/company/list')
         .then((response) => {
           setCompanyList(response?.data?.data?.rows || []);
+          console.log(response?.data?.data?.rows, 'compat');
         })
         .catch((error) => {
           enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
@@ -268,7 +274,9 @@ export default function VehicleListPage() {
       .then((res) => {
         let data = res?.data?.data || [];
         setVehicleTypeList(data);
+        console.log('asfdf', data);
       })
+
       .catch((error) => {
         enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
           variant: 'warning',

@@ -8,7 +8,7 @@ import { isValidToken, setSession } from './utils';
 import jwt_decode from 'jwt-decode';
 import { useRouter } from 'next/router';
 // ----------------------------------------------------------------------
-
+import axiosInstance from '../utils/axios';
 // NOTE:
 // We only build demo at basic level.
 // Customer will need to do some extra handling yourself if you want to extend the logic and other features...
@@ -127,8 +127,9 @@ export function AuthProvider({ children }) {
   }, [initialize]);
 
   // LOGIN
+
   const login = useCallback(async (email, password) => {
-    const response = await axios.post('/login', {
+    const response = await axiosInstance.post('/login', {
       email,
       password,
     });

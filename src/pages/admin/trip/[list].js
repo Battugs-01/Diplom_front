@@ -54,7 +54,6 @@ const ICONS = {
 };
 const TABLE_HEAD = [
   { label: '№', align: 'center' },
-  { label: 'Х/Овог', align: 'left' },
   { label: 'Х/Нэр', align: 'left' },
   { label: 'Х/утас', align: 'left' },
   { id: 'className', label: 'Тасгийн нэр', align: 'left' },
@@ -273,7 +272,7 @@ export default function TripListPage() {
   return (
     <>
       <Head>
-        <title> Аялалын мэдээлэл </title>
+        <title> Захиалгын мэдээлэл </title>
       </Head>
 
       <Container maxWidth={false} sx={{ padding: '10px !important' }}>

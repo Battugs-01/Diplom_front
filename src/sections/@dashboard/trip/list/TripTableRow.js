@@ -20,7 +20,7 @@ export default function TripTableRow({ row, onViewRow, rowQueue }) {
   // extracting row
   const { Customer, Category, start_time, end_time } = row;
 
-  const { id, firstname, lastname, phone } = Customer;
+  const { id, phone } = Customer;
 
   const { name } = Category;
   // extracting rowQueue
@@ -39,10 +39,10 @@ export default function TripTableRow({ row, onViewRow, rowQueue }) {
       </TableCell> */}
 
       <TableCell align="left" sx={{ minWidth: 100 }}>
-        {lastname}
+        {Customer.name}
       </TableCell>
 
-      <TableCell align="left">{firstname}</TableCell>
+      {/* <TableCell align="left">{firstname}</TableCell> */}
 
       <TableCell align="left">{phone}</TableCell>
 

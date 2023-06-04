@@ -1,5 +1,5 @@
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -42,6 +42,7 @@ import {
 } from '../../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../../sections/@dashboard/user/list';
+import axiosInstance from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -61,11 +62,11 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
-  { id: 'role', label: 'Role', align: 'left' },
-  { id: 'isVerified', label: 'Verified', align: 'center' },
-  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'phone', label: 'Утас', align: 'left' },
+  { id: 'question', label: 'Асуулт', align: 'left' },
+  { id: 'answer', label: 'Хариулт', align: 'left' },
+  { id: 'isVerified', label: 'Төлөв', align: 'center' },
+  // { id: 'status', label: 'Status', align: 'left' },
   { id: '' },
 ];
 
@@ -75,6 +76,7 @@ UserListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
+// ---
 export default function UserListPage() {
   const {
     dense,
@@ -190,10 +192,31 @@ export default function UserListPage() {
     setFilterStatus('all');
   };
 
+  const [histories, setHistories] = useState([]);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getHistoryData();
+    }, 3000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  const getHistoryData = async () => {
+    await axiosInstance
+      .get('/history')
+      .then((response) => {
+        setHistories(response.data.history);
+      })
+      .catch((error) => {
+        console.log('history error => ', error);
+      });
+  };
+
   return (
     <>
       <Head>
-        <title> User: List | Minimal UI</title>
+        <title> Users List </title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -205,34 +228,35 @@ export default function UserListPage() {
             { name: 'List' },
           ]}
           action={
-            <Button
-              component={NextLink}
-              href={PATH_DASHBOARD.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New User
-            </Button>
+            <></>
+            // <Button
+            //   component={NextLink}
+            //   href={PATH_DASHBOARD.user.new}
+            //   variant="contained"
+            //   startIcon={<Iconify icon="eva:plus-fill" />}
+            // >
+            //   New User
+            // </Button>
           }
         />
 
         <Card>
-          <Tabs
-            value={filterStatus}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2,
-              bgcolor: 'background.neutral',
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab key={tab} label={tab} value={tab} />
-            ))}
-          </Tabs>
+          {/* <Tabs
+              value={filterStatus}
+              onChange={handleFilterStatus}
+              sx={{
+                px: 2,
+                bgcolor: 'background.neutral',
+              }}
+            >
+              {STATUS_OPTIONS.map((tab) => (
+                <Tab key={tab} label={tab} value={tab} />
+              ))}
+            </Tabs> */}
 
-          <Divider />
+          {/* <Divider /> */}
 
-          <UserTableToolbar
+          {/* <UserTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
@@ -240,7 +264,7 @@ export default function UserListPage() {
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
-          />
+          /> */}
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
@@ -280,7 +304,7 @@ export default function UserListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered
+                  {/* {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <UserTableRow
@@ -291,12 +315,24 @@ export default function UserListPage() {
                         onDeleteRow={() => handleDeleteRow(row.id)}
                         onEditRow={() => handleEditRow(row.name)}
                       />
-                    ))}
+                    ))} */}
 
-                  <TableEmptyRows
+                  {histories.map((row, index) => (
+                    <UserTableRow
+                      key={index}
+                      row={row}
+                      userData={dataFiltered[index]}
+                      selected={selected.includes(row.id)}
+                      onSelectRow={() => onSelectRow(row.id)}
+                      onDeleteRow={() => handleDeleteRow(row.id)}
+                      onEditRow={() => handleEditRow(row.name)}
+                    />
+                  ))}
+
+                  {/* <TableEmptyRows
                     height={denseHeight}
                     emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                  />
+                  /> */}
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
@@ -304,7 +340,7 @@ export default function UserListPage() {
             </Scrollbar>
           </TableContainer>
 
-          <TablePaginationCustom
+          {/* <TablePaginationCustom
             count={dataFiltered.length}
             page={page}
             rowsPerPage={rowsPerPage}
@@ -313,7 +349,7 @@ export default function UserListPage() {
             //
             dense={dense}
             onChangeDense={onChangeDense}
-          />
+          /> */}
         </Card>
       </Container>
 
@@ -357,9 +393,7 @@ function applyFilter({ inputData, comparator, filterName, filterStatus, filterRo
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-    );
+    inputData = inputData.filter((user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
   }
 
   if (filterStatus !== 'all') {

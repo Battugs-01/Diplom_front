@@ -28,8 +28,9 @@ UserTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
-  const { name, avatarUrl, company, role, isVerified, status } = row;
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, userData }) {
+  const { name, avatarUrl, company, role, isVerified, status } = userData;
+  const { id, phone, question, answer} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -54,24 +55,24 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} src={avatarUrl} />
+            <Avatar alt={id} src={avatarUrl} />
 
             <Typography variant="subtitle2" noWrap>
-              {name}
+              {phone}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{company}</TableCell>
+        <TableCell align="left">{question}</TableCell>
 
         <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {role}
+          {answer}
         </TableCell>
 
         <TableCell align="center">
@@ -86,7 +87,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           />
         </TableCell>
 
-        <TableCell align="left">
+        {/* <TableCell align="left">
           <Label
             variant="soft"
             color={(status === 'banned' && 'error') || 'success'}
@@ -94,7 +95,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           >
             {status}
           </Label>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

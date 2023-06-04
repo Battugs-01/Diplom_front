@@ -14,20 +14,28 @@ TripTableRow.propTypes = {
   rowQueue: PropTypes.object,
 };
 
+
+/*
+   {
+            "id": 5,
+            "order_time": "Audio file is too small. Minimum file size is 5KB for wav, 2KB for others.",
+            "categoryID": "Шүдний тасаг.",
+            "customerID": 13,
+            "customer": {
+                "name": "Чойжил Баттөгс.",
+                "phone": "95614460"
+            },
+*/
 // ----------------------------------------------------------------------
 
 export default function TripTableRow({ row, onViewRow, rowQueue }) {
   // extracting row
-  const { Customer, Category, start_time, end_time } = row;
+  const { id, customer, Category, start_time, end_time, categoryID } = row;
 
-  const { id, phone } = Customer;
+  const { name, phone } = customer;
 
-  const { name } = Category;
-  // extracting rowQueue
   const { index, rowsPerPage, page } = rowQueue;
 
-  // if (name === 'Шүд') {
-  // }
   return (
     <TableRow hover>
       <TableCell align="center">{index + page * rowsPerPage + 1}</TableCell>
@@ -39,7 +47,7 @@ export default function TripTableRow({ row, onViewRow, rowQueue }) {
       </TableCell> */}
 
       <TableCell align="left" sx={{ minWidth: 100 }}>
-        {Customer.name}
+        {name}
       </TableCell>
 
       {/* <TableCell align="left">{firstname}</TableCell> */}
@@ -54,7 +62,7 @@ export default function TripTableRow({ row, onViewRow, rowQueue }) {
           color={name === 'Шүд' ? 'error' : name === 'Нүд' ? 'success' : 'warning'}
           sx={{ textTransform: 'capitalize' }}
         >
-          {name}
+          {categoryID}
         </Label>
       </TableCell>
 

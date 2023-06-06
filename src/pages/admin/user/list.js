@@ -197,7 +197,7 @@ export default function UserListPage() {
     getHistoryData()
     const intervalId = setInterval(() => {
       getHistoryData();
-    }, 3000);
+    }, 1500);
     return () => {
       clearInterval(intervalId);
     };

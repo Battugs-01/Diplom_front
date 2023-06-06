@@ -194,6 +194,7 @@ export default function UserListPage() {
 
   const [histories, setHistories] = useState([]);
   useEffect(() => {
+    getHistoryData()
     const intervalId = setInterval(() => {
       getHistoryData();
     }, 3000);

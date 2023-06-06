@@ -40,7 +40,7 @@ const navConfig = [
     subheader: 'Удирдлага',
     items: [
       { title: 'Хяналтын самбар', path: PATH_DASHBOARD.controlpanel.charts, icon: ICONS.analytics },
-      { title: 'Хэрэглэгчийн жагсаалт', path: PATH_DASHBOARD.user.list, icon: ICONS.user },
+      { title: 'Хэрэглэгчийн түүх', path: PATH_DASHBOARD.user.list, icon: ICONS.user },
       { title: 'Захиалгын жагсаалт', path: PATH_DASHBOARD.trip.root, icon: ICONS.lock },
     ],
   },

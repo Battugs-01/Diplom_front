@@ -135,7 +135,7 @@ export default function TripListPage() {
       setMaxHeight(window.innerHeight - 450);
     }
     handleResize();
-    
+
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);

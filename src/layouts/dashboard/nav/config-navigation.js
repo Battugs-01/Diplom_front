@@ -39,9 +39,14 @@ const navConfig = [
   {
     subheader: 'Удирдлага',
     items: [
+      { title: 'Аялал', path: PATH_DASHBOARD.booking.call, icon: ICONS.trip },
       { title: 'Хяналтын самбар', path: PATH_DASHBOARD.controlpanel.charts, icon: ICONS.analytics },
-      { title: 'Хэрэглэгчийн түүх', path: PATH_DASHBOARD.user.list, icon: ICONS.user },
-      { title: 'Захиалгын жагсаалт', path: PATH_DASHBOARD.trip.root, icon: ICONS.lock },
+      { title: 'Дуудлагын жагсаалт', path: PATH_DASHBOARD.invoice.list, icon: ICONS.mail },
+      { title: 'Жолоочын жагсаалт', path: PATH_DASHBOARD.trip.root, icon: ICONS.lock },
+      { title: 'Эмч жагсаалт', path: PATH_DASHBOARD.general.analytics, icon: ICONS.lock },
+      { title: 'Сул жолооч', path: PATH_DASHBOARD.general.ecommerce, icon: ICONS.invoice },
+      { title: 'Хэрэглэгчийн түүх', path: PATH_DASHBOARD.user.list, icon: ICONS.ecommerce },
+      // { title: 'Сул жолооч', path: PATH_DASHBOARD.dashboard.analytics, icon: ICONS.lock },
     ],
   },
   // GENERAL

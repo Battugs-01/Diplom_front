@@ -6,6 +6,7 @@ function path(root, sublink) {
 
 const ROOTS_AUTH = '/auth';
 const ROOTS_ADMIN = '/admin';
+const ROOTS_DASHBOARD = '/dashboard';
 
 // ----------------------------------------------------------------------
 
@@ -161,6 +162,10 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_ADMIN, '/admin'),
     table: path(ROOTS_ADMIN, '/admin/table'),
   },
+  // user: {
+  //   root: path(ROOTS_DASHBOARD, '/user'),
+  //   list: path(ROOTS_DASHBOARD, '/user/list'),
+  // },
   trip: {
     root: path(ROOTS_ADMIN, '/trip'),
     list: (params) => path(ROOTS_ADMIN, `/trip/${params}`),
@@ -171,9 +176,13 @@ export const PATH_DASHBOARD = {
     list: (params) => path(ROOTS_ADMIN, `/delivered/${params}`),
     view: (id) => path(ROOTS_ADMIN, `/delivered/detail/${id}`),
   },
+  // booking: {
+  //   root: path(ROOTS_ADMIN, '/admin'),
+  //   call: path(ROOTS_ADMIN, '/controlpanel/charts'),
+  // },
   booking: {
-    root: path(ROOTS_ADMIN, '/admin'),
-    call: path(ROOTS_ADMIN, '/controlpanel/charts'),
+    root: path(ROOTS_ADMIN, '/booking'),
+    call: path(ROOTS_ADMIN, '/booking/call'),
   },
   news: {
     root: path(ROOTS_ADMIN, '/news'),

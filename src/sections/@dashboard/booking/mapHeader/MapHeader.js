@@ -157,34 +157,34 @@ export default function MapHeader({ status, drivers, setStatus, setMarkers, hand
           title="Хаягтай"
           total={drivers?.count_active || 0}
           percent={getPercentByStatus(drivers?.drivers?.count || 0, drivers?.count_active || 0)}
-          icon="eva:bell-fill"
+          icon="bx:trip"
           color={theme.palette.info.main}
           onClickStatus={handleOnClickStatus}
         />
-        <DriverAnalytic
+        {/* <DriverAnalytic
           title="Хүлээж байна"
           total={drivers?.count_arrived || 0}
           percent={getPercentByStatus(drivers?.drivers?.count || 0, drivers?.count_arrived || 0)}
           icon="eva:clock-fill"
           color={theme.palette.warning.main}
           onClickStatus={handleOnClickStatus}
-        />
-        <DriverAnalytic
-          title="Зорчигчтой"
+        /> */}
+        {/* <DriverAnalytic
+          title="Түгжрэлд"
           total={drivers?.count_on_going_trip || 0}
           percent={getPercentByStatus(drivers?.drivers?.count || 0, drivers?.count_on_going_trip || 0)}
           icon="bx:trip"
           color={theme.palette.error.main}
           onClickStatus={handleOnClickStatus}
-        />
-        <DriverAnalytic
-          title="Идэвхигүй"
+        /> */}
+        {/* <DriverAnalytic
+          title="Түгжрэлд"
           total={notAvailable()}
           percent={getPercentByStatus(drivers?.drivers?.count || 0, notAvailable())}
           icon="ic:sharp-airplanemode-inactive"
           color={theme.palette.text.secondary}
           onClickStatus={handleOnClickStatus}
-        />
+        /> */}
 
         <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
 

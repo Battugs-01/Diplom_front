@@ -20,22 +20,11 @@ InvoiceAnalytic.propTypes = {
 
 export default function InvoiceAnalytic({ title, total, icon, color, percent, price }) {
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ width: 1, minWidth: 200 }}
-    >
+    <Stack direction="row" alignItems="center" justifyContent="center" sx={{ width: 1, minWidth: 200 }}>
       <Stack alignItems="center" justifyContent="center" sx={{ position: 'relative' }}>
         <Iconify icon={icon} width={24} sx={{ color, position: 'absolute' }} />
 
-        <CircularProgress
-          variant="determinate"
-          value={percent}
-          size={56}
-          thickness={4}
-          sx={{ color, opacity: 0.48 }}
-        />
+        <CircularProgress variant="determinate" value={percent} size={56} thickness={4} sx={{ color, opacity: 0.48 }} />
 
         <CircularProgress
           variant="determinate"
@@ -56,15 +45,12 @@ export default function InvoiceAnalytic({ title, total, icon, color, percent, pr
         <Typography variant="h6">{title}</Typography>
 
         <Typography variant="subtitle2">
-          {fShortenNumber(total)}{' '}
-          <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
-            invoices
-          </Box>
+          {fShortenNumber(total)} <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}></Box>
         </Typography>
 
-        <Typography variant="subtitle2" sx={{ color }}>
+        {/* <Typography variant="subtitle2" sx={{ color }}>
           {fCurrency(price)}
-        </Typography>
+        </Typography> */}
       </Stack>
     </Stack>
   );

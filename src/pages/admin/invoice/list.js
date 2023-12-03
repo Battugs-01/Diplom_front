@@ -61,12 +61,13 @@ const SERVICE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
-  { id: 'invoiceNumber', label: 'Client', align: 'left' },
-  { id: 'createDate', label: 'Create', align: 'left' },
-  { id: 'dueDate', label: 'Due', align: 'left' },
-  { id: 'price', label: 'Amount', align: 'center', width: 140 },
-  { id: 'sent', label: 'Sent', align: 'center', width: 140 },
-  { id: 'status', label: 'Status', align: 'left' },
+  { id: 'invoiceNumber', label: 'Check', align: 'left' },
+  { id: '№', label: '№', align: 'left' },
+  { id: 'createDate', label: 'Овог нэр', align: 'left' },
+  { id: 'dueDate', label: 'Утас', align: 'left' },
+  { id: 'price', label: 'Биеийн байдал', align: 'center', width: 140 },
+  { id: 'sent', label: 'Хаяг', align: 'center', width: 140 },
+  { id: 'status', label: 'Түвшин', align: 'left' },
   { id: '' },
 ];
 
@@ -103,6 +104,7 @@ export default function InvoiceListPage() {
   } = useTable({ defaultOrderBy: 'createDate' });
 
   const [tableData, setTableData] = useState(_invoices);
+  // const [tableData, setTableData] = useState([]);
 
   const [filterName, setFilterName] = useState('');
 
@@ -131,10 +133,7 @@ export default function InvoiceListPage() {
   const denseHeight = dense ? 56 : 76;
 
   const isFiltered =
-    filterStatus !== 'all' ||
-    filterName !== '' ||
-    filterService !== 'all' ||
-    (!!filterStartDate && !!filterEndDate);
+    filterStatus !== 'all' || filterName !== '' || filterService !== 'all' || (!!filterStartDate && !!filterEndDate);
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
@@ -154,11 +153,11 @@ export default function InvoiceListPage() {
   const getPercentByStatus = (status) => (getLengthByStatus(status) / tableData.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'All', color: 'info', count: tableData.length },
-    { value: 'paid', label: 'Paid', color: 'success', count: getLengthByStatus('paid') },
-    { value: 'unpaid', label: 'Unpaid', color: 'warning', count: getLengthByStatus('unpaid') },
-    { value: 'overdue', label: 'Overdue', color: 'error', count: getLengthByStatus('overdue') },
-    { value: 'draft', label: 'Draft', color: 'default', count: getLengthByStatus('draft') },
+    { value: 'all', label: 'Бүх', color: 'info', count: tableData.length },
+    { value: 'paid', label: 'Очсон', color: 'success', count: getLengthByStatus('paid') },
+    { value: 'unpaid', label: 'Замдаа яваа', color: 'warning', count: getLengthByStatus('unpaid') },
+    { value: 'overdue', label: 'Цуцлагдсан', color: 'error', count: getLengthByStatus('overdue') },
+    { value: 'draft', label: 'Дууссан', color: 'default', count: getLengthByStatus('draft') },
   ];
 
   const handleOpenConfirm = () => {
@@ -232,35 +231,35 @@ export default function InvoiceListPage() {
   return (
     <>
       <Head>
-        <title> Invoice: List | Minimal UI</title>
+        <title>Дуудлагын жагсаалт</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Invoice List"
+          heading="Дуудлагын жагсаалт"
           links={[
             {
               name: 'Dashboard',
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Invoices',
+              name: 'Дуудлага',
               href: PATH_DASHBOARD.invoice.root,
             },
             {
-              name: 'List',
+              name: 'Жагсаалт',
             },
           ]}
-          action={
-            <Button
-              component={NextLink}
-              href={PATH_DASHBOARD.invoice.new}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
-              New Invoice
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     component={NextLink}
+          //     href={PATH_DASHBOARD.invoice.new}
+          //     variant="contained"
+          //     startIcon={<Iconify icon="eva:plus-fill" />}
+          //   >
+          //     New Invoice
+          //   </Button>
+          // }
         />
 
         <Card sx={{ mb: 5 }}>
@@ -271,7 +270,7 @@ export default function InvoiceListPage() {
               sx={{ py: 2 }}
             >
               <InvoiceAnalytic
-                title="Total"
+                title="Бүх"
                 total={tableData.length}
                 percent={100}
                 price={sumBy(tableData, 'totalPrice')}
@@ -280,7 +279,7 @@ export default function InvoiceListPage() {
               />
 
               <InvoiceAnalytic
-                title="Paid"
+                title="Очсон"
                 total={getLengthByStatus('paid')}
                 percent={getPercentByStatus('paid')}
                 price={getTotalPriceByStatus('paid')}
@@ -289,7 +288,7 @@ export default function InvoiceListPage() {
               />
 
               <InvoiceAnalytic
-                title="Unpaid"
+                title="Замдаа яваа"
                 total={getLengthByStatus('unpaid')}
                 percent={getPercentByStatus('unpaid')}
                 price={getTotalPriceByStatus('unpaid')}
@@ -298,7 +297,7 @@ export default function InvoiceListPage() {
               />
 
               <InvoiceAnalytic
-                title="Overdue"
+                title="Цуцлагдсан"
                 total={getLengthByStatus('overdue')}
                 percent={getPercentByStatus('overdue')}
                 price={getTotalPriceByStatus('overdue')}
@@ -307,7 +306,7 @@ export default function InvoiceListPage() {
               />
 
               <InvoiceAnalytic
-                title="Draft"
+                title="Дууссан"
                 total={getLengthByStatus('draft')}
                 percent={getPercentByStatus('draft')}
                 price={getTotalPriceByStatus('draft')}
@@ -419,24 +418,19 @@ export default function InvoiceListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <InvoiceTableRow
-                        key={row.id}
-                        row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                      />
-                    ))}
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                    <InvoiceTableRow
+                      key={row.id}
+                      row={row}
+                      selected={selected.includes(row.id)}
+                      onSelectRow={() => onSelectRow(row.id)}
+                      onViewRow={() => handleViewRow(row.id)}
+                      onEditRow={() => handleEditRow(row.id)}
+                      onDeleteRow={() => handleDeleteRow(row.id)}
+                    />
+                  ))}
 
-                  <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                  />
+                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
@@ -517,9 +511,7 @@ function applyFilter({
   }
 
   if (filterService !== 'all') {
-    inputData = inputData.filter((invoice) =>
-      invoice.items.some((c) => c.service === filterService)
-    );
+    inputData = inputData.filter((invoice) => invoice.items.some((c) => c.service === filterService));
   }
 
   if (filterStartDate && filterEndDate) {

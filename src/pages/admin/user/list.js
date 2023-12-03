@@ -193,11 +193,12 @@ export default function UserListPage() {
   };
 
   const [histories, setHistories] = useState([]);
+
   useEffect(() => {
-    getHistoryData()
+    getHistoryData();
     const intervalId = setInterval(() => {
       getHistoryData();
-    }, 1500);
+    }, 15000);
     return () => {
       clearInterval(intervalId);
     };
@@ -242,22 +243,22 @@ export default function UserListPage() {
         />
 
         <Card>
-          {/* <Tabs
-              value={filterStatus}
-              onChange={handleFilterStatus}
-              sx={{
-                px: 2,
-                bgcolor: 'background.neutral',
-              }}
-            >
-              {STATUS_OPTIONS.map((tab) => (
-                <Tab key={tab} label={tab} value={tab} />
-              ))}
-            </Tabs> */}
+          <Tabs
+            value={filterStatus}
+            onChange={handleFilterStatus}
+            sx={{
+              px: 2,
+              bgcolor: 'background.neutral',
+            }}
+          >
+            {STATUS_OPTIONS.map((tab) => (
+              <Tab key={tab} label={tab} value={tab} />
+            ))}
+          </Tabs>
 
-          {/* <Divider /> */}
+          <Divider />
 
-          {/* <UserTableToolbar
+          <UserTableToolbar
             isFiltered={isFiltered}
             filterName={filterName}
             filterRole={filterRole}
@@ -265,7 +266,7 @@ export default function UserListPage() {
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
             onResetFilter={handleResetFilter}
-          /> */}
+          />
 
           <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
             <TableSelectedAction
@@ -304,19 +305,17 @@ export default function UserListPage() {
                   }
                 />
 
-                <TableBody>
-                  {/* {dataFiltered
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <UserTableRow
-                        key={row.id}
-                        row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.name)}
-                      />
-                    ))} */}
+                {/* <TableBody>
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                    <UserTableRow
+                      key={row.id}
+                      row={row}
+                      selected={selected.includes(row.id)}
+                      onSelectRow={() => onSelectRow(row.id)}
+                      onDeleteRow={() => handleDeleteRow(row.id)}
+                      onEditRow={() => handleEditRow(row.name)}
+                    />
+                  ))}
 
                   {histories.map((row, index) => (
                     <UserTableRow
@@ -330,18 +329,15 @@ export default function UserListPage() {
                     />
                   ))}
 
-                  {/* <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
-                  /> */}
+                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
-                </TableBody>
+                </TableBody> */}
               </Table>
             </Scrollbar>
           </TableContainer>
 
-          {/* <TablePaginationCustom
+          <TablePaginationCustom
             count={dataFiltered.length}
             page={page}
             rowsPerPage={rowsPerPage}
@@ -350,7 +346,7 @@ export default function UserListPage() {
             //
             dense={dense}
             onChangeDense={onChangeDense}
-          /> */}
+          />
         </Card>
       </Container>
 

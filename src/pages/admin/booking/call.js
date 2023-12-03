@@ -37,6 +37,15 @@ import ListTabs from 'src/sections/@dashboard/booking/tab';
 import MapHeader from 'src/sections/@dashboard/booking/mapHeader';
 import { CallDialog, FailedDialog, SuccessDialog } from 'src/sections/@dashboard/booking/dialog';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import { EcommerceSaleByGender, EcommerceYearlySales } from 'src/sections/@dashboard/general/e-commerce';
+import {
+  BankingBalanceStatistics,
+  BankingExpensesCategories,
+  BankingRecentTransitions,
+} from 'src/sections/@dashboard/general/banking';
+import { useTheme } from '@emotion/react';
+import { _bankingRecentTransitions } from 'src/_mock/arrays';
+import { AnalyticsConversionRates, AnalyticsCurrentVisits } from 'src/sections/@dashboard/general/analytics';
 const MapSide = dynamic(() => import('src/sections/@dashboard/booking/map/MapSide'), { ssr: false });
 
 // ----------------------------------------------------------------------
@@ -52,6 +61,7 @@ BookingPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 // ----------------------------------------------------------------------
 
 export default function BookingPage() {
+  const theme = useTheme();
   const firstFieldRef = useRef();
   const secondFieldRef = useRef();
 
@@ -122,12 +132,12 @@ export default function BookingPage() {
 
   // use effect
   useEffect(() => {
-    getSSID();
-    getData();
-    getVehicleType();
-    return function cleanup() {
-      clearInterval(interval);
-    };
+    // getSSID();
+    // getData();
+    // getVehicleType();
+    // return function cleanup() {
+    //   clearInterval(interval);
+    // };
   }, []);
 
   // combining saddress new string with autocomplete's value
@@ -543,12 +553,12 @@ export default function BookingPage() {
   return (
     <>
       <Head>
-        <title> Захиалга | 1950 </title>
+        <title> Захиалга | Khangardi </title>
       </Head>
 
       <Container maxWidth={false} disableGutters>
         <Grid container columnSpacing={1} rowSpacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12} sm={2.5}>
+          {/* <Grid item xs={12} sm={2.5}>
             <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
               <Card sx={{ p: 1.5, mb: 1 }}>
                 <Stack spacing={2}>
@@ -679,8 +689,9 @@ export default function BookingPage() {
                 </Stack>
               </Card>
             </FormProvider>
-          </Grid>
-          <Grid item xs={12} sm={9.5}>
+          </Grid> */}
+
+          <Grid item xs={12} sm={12}>
             <Card>
               <MapHeader
                 status={status}
@@ -708,15 +719,66 @@ export default function BookingPage() {
               />
             </Card>
           </Grid>
+          <Grid item xs={12} md={8}>
+            <Stack spacing={5}>
+              <AnalyticsConversionRates
+                title="Хэрэглэгчдийн насны ангилал"
+                chart={{
+                  series: [
+                    { label: '0-5 нас', value: 80 },
+                    { label: '5-10 нас', value: 71 },
+                    { label: '10-20 нас', value: 40 },
+                    { label: '20-30 нас', value: 44 },
+                    { label: '30-40 нас', value: 43 },
+                    { label: '40-50 нас', value: 43 },
+                    { label: '50-60 нас', value: 43 },
+                    { label: '60-70 нас', value: 47 },
+                    { label: '70-80 нас', value: 54 },
+                    { label: '80-85 нас', value: 58 },
+                    { label: '85-90 нас', value: 29 },
+                    { label: '90-95 нас', value: 27 },
+                    { label: '95-100 нас', value: 10 },
+                  ],
+                }}
+              />
+            </Stack>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <AnalyticsCurrentVisits
+              title="Дүүргүүдээс ирж буй дуудлага"
+              chart={{
+                series: [
+                  { label: 'Баянгол', value: 4344 },
+                  { label: 'Баянгол', value: 5435 },
+                  { label: 'Сонгинохайрхан', value: 1443 },
+                  { label: 'Сүхбаатар', value: 4443 },
+                  { label: 'Хан-Уул', value: 4200 },
+                  { label: 'Багануур', value: 4200 },
+                  { label: 'Чингэлтэй', value: 4200 },
+                  { label: 'Налайх', value: 4200 },
+                ],
+                colors: [
+                  theme.palette.primary.main,
+                  theme.palette.info.main,
+                  theme.palette.info.dark,
+                  theme.palette.error.main,
+                  theme.palette.error.dark,
+                  theme.palette.warning.main,
+                  theme.palette.warning.dark,
+                  theme.palette.primary.dark,
+                ],
+              }}
+            />
+          </Grid>
         </Grid>
 
-        <ListTabs
+        {/* <ListTabs
           phoneNumber={values?.phone}
           passenger_lat_lon={passenger_lat_lon}
           handleOnSetDaddress={handleOnSetDaddress}
           handleOnSetSaddress={handleOnSetSaddress}
           handleChangeLaterBooking={handleChangeLaterBooking}
-        />
+        /> */}
 
         {openCall && (
           <CallDialog

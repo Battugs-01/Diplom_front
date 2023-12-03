@@ -74,32 +74,23 @@ export default function BankingExpensesCategories({ title, subheader, chart, ...
       <CardHeader title={title} subheader={subheader} />
 
       <Box sx={{ my: 5 }} dir="ltr">
-        <Chart
-          type="polarArea"
-          series={chartSeries}
-          options={chartOptions}
-          height={isDesktop ? 240 : 360}
-        />
+        <Chart type="polarArea" series={chartSeries} options={chartOptions} height={isDesktop ? 255 : 380} />
       </Box>
 
       <Divider />
 
       <Stack direction="row" divider={<Divider orientation="vertical" flexItem />}>
         <Box sx={{ py: 2, width: 1, textAlign: 'center' }}>
-          <Typography sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>
-            Categories
-          </Typography>
+          <Typography sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>Төрөл</Typography>
 
-          <Typography sx={{ typography: 'h4' }}>9</Typography>
+          <Typography sx={{ typography: 'h4' }}>7</Typography>
         </Box>
-
+        {/* 
         <Box sx={{ py: 2, width: 1, textAlign: 'center' }}>
-          <Typography sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>
-            Categories
-          </Typography>
+          <Typography sx={{ mb: 1, typography: 'body2', color: 'text.secondary' }}>Нийт аялал</Typography>
 
           <Typography sx={{ typography: 'h4' }}>$18,765</Typography>
-        </Box>
+        </Box> */}
       </Stack>
     </StyledRoot>
   );

@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 // utils
-import { fDate } from '../../../../utils/formatTime';
+import { fDate, fDateTimeSuffix } from '../../../../utils/formatTime';
 import { fCurrency } from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/label';
@@ -42,7 +42,9 @@ export default function InvoiceTableRow({
   onEditRow,
   onDeleteRow,
 }) {
-  const { sent, invoiceNumber, createDate, dueDate, status, invoiceTo, totalPrice } = row;
+
+  console.log(row , 'Ulmaa');
+  const { sent, invoiceNumber, createDate, dueDate, priority, invoiceTo, totalPrice } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -73,46 +75,37 @@ export default function InvoiceTableRow({
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <CustomAvatar name={invoiceTo.name} />
-
             <div>
               <Typography variant="subtitle2" noWrap>
-                {invoiceTo.name}
+                {row?.user?.name}
               </Typography>
-
-              <Link
-                noWrap
-                variant="body2"
-                onClick={onViewRow}
-                sx={{ color: 'text.disabled', cursor: 'pointer' }}
-              >
-                {`INV-${invoiceNumber}`}
-              </Link>
             </div>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{fDate(createDate)}</TableCell>
+        <TableCell align="left">{row?.user?.phone}</TableCell>
 
-        <TableCell align="left">{fDate(dueDate)}</TableCell>
+        <TableCell align="left">{fDateTimeSuffix(row?.createdAt)}</TableCell> 
 
-        <TableCell align="center">{fCurrency(totalPrice)}</TableCell>
+
+        <TableCell align="left">{row?.location || 'null'}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {sent}
+          {row?.description}
         </TableCell>
 
         <TableCell align="left">
           <Label
             variant="soft"
             color={
-              (status === 'paid' && 'success') ||
-              (status === 'unpaid' && 'warning') ||
-              (status === 'overdue' && 'error') ||
+              (priority === 'medium' && 'success') ||
+              (priority === 'high' && 'warning') ||
+              (priority === 'critical' && 'error') ||
+              (priority === 'low' && 'error') ||
               'default'
             }
           >
-            {status}
+            {row?.priority || 'null'}
           </Label>
         </TableCell>
 
@@ -120,7 +113,7 @@ export default function InvoiceTableRow({
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell>
+        </TableCell> 
       </TableRow>
 
       <MenuPopover

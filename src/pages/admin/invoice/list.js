@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import sumBy from 'lodash/sumBy';
 // next
 import Head from 'next/head';
@@ -45,9 +45,12 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from '../../../components/table';
+import { useRef } from 'react';
 // sections
 import InvoiceAnalytic from '../../../sections/@dashboard/invoice/InvoiceAnalytic';
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../../sections/@dashboard/invoice/list';
+import axiosInstance from 'src/utils/axios';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -62,11 +65,12 @@ const SERVICE_OPTIONS = [
 
 const TABLE_HEAD = [
   { id: 'invoiceNumber', label: 'Check', align: 'left' },
-  { id: '№', label: '№', align: 'left' },
-  { id: 'createDate', label: 'Овог нэр', align: 'left' },
-  { id: 'dueDate', label: 'Утас', align: 'left' },
-  { id: 'price', label: 'Биеийн байдал', align: 'center', width: 140 },
-  { id: 'sent', label: 'Хаяг', align: 'center', width: 140 },
+  // { id: '№', label: '№', align: 'left' },
+  { id: 'name', label: 'Овог нэр', align: 'left' },
+  { id: 'phone', label: 'Утасны дугаар', align: 'left' },
+  { id: 'created_at', label: 'Холбогдсон цаг', align: 'left' },
+  { id: 'location', label: 'Хаяг', align: 'left', width: 140 },
+  { id: 'description', label: 'Биеийн байдал', align: 'left', width: 140 },
   { id: 'status', label: 'Түвшин', align: 'left' },
   { id: '' },
 ];
@@ -79,6 +83,8 @@ InvoiceListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function InvoiceListPage() {
   const theme = useTheme();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const { themeStretch } = useSettingsContext();
 
@@ -106,11 +112,25 @@ export default function InvoiceListPage() {
   const [tableData, setTableData] = useState(_invoices);
   // const [tableData, setTableData] = useState([]);
 
+  const [total, setTotal] = useState(0);
+
+  const [loaderState, setLoaderState] = useState(0);
+
+  const [myData, setMyData] = useState(0);
+
+  const [tab, setTab] = useState([]);
+
+
+  const filterStatusRef = useRef('new');
+  
   const [filterName, setFilterName] = useState('');
 
+  const [totalCount, setTotalCount] = useState([]);
+
+  
   const [openConfirm, setOpenConfirm] = useState(false);
 
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('new');
 
   const [filterService, setFilterService] = useState('all');
 
@@ -133,7 +153,7 @@ export default function InvoiceListPage() {
   const denseHeight = dense ? 56 : 76;
 
   const isFiltered =
-    filterStatus !== 'all' || filterName !== '' || filterService !== 'all' || (!!filterStartDate && !!filterEndDate);
+    filterStatus !== 'new' || filterName !== '' || filterService !== 'new' || (!!filterStartDate && !!filterEndDate);
 
   const isNotFound =
     (!dataFiltered.length && !!filterName) ||
@@ -153,11 +173,10 @@ export default function InvoiceListPage() {
   const getPercentByStatus = (status) => (getLengthByStatus(status) / tableData.length) * 100;
 
   const TABS = [
-    { value: 'all', label: 'Бүх', color: 'info', count: tableData.length },
-    { value: 'paid', label: 'Очсон', color: 'success', count: getLengthByStatus('paid') },
-    { value: 'unpaid', label: 'Замдаа яваа', color: 'warning', count: getLengthByStatus('unpaid') },
-    { value: 'overdue', label: 'Цуцлагдсан', color: 'error', count: getLengthByStatus('overdue') },
-    { value: 'draft', label: 'Дууссан', color: 'default', count: getLengthByStatus('draft') },
+    { value: 'new', label: 'Шинэ', color: 'info', count: tableData.length },
+    { value: 'going', label: 'Явж байгаа', color: 'success', count: getLengthByStatus('going') },
+    { value: 'completed', label: 'Биелсэн', color: 'warning', count: getLengthByStatus('completed') },
+    { value: 'canceled', label: 'Цуцлагдсан', color: 'error', count: getLengthByStatus('canceled') },
   ];
 
   const handleOpenConfirm = () => {
@@ -222,11 +241,49 @@ export default function InvoiceListPage() {
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterStatus('all');
+    // setFilterStatus('new');
     setFilterService('all');
     setFilterEndDate(null);
     setFilterStartDate(null);
   };
+
+  useEffect(() => {
+    filterStatusRef.current = filterStatus;
+    getData();
+  }, [filterStatus]);
+
+  console.log('sda' , myData)
+
+  async function getData() {
+    getOrderData();
+    setInterval(async () => {
+      getOrderData();
+    }, 5000);
+  }
+
+   async function getOrderData ()  {
+    await axiosInstance
+      .get(`/orders?status=${filterStatusRef.current}`)
+      .then((response) => {
+        setMyData(response?.data?.orders || []);
+        setTotalCount(response?.data?.total_count || [])
+        if (localStorage.getItem('total') < response.data.orders.length) {
+          enqueueSnackbar(`Шинэ захиалга ирлээ`, {
+            variant: 'success',
+          });
+          localStorage.setItem('total', response.data.orders.length);
+        }
+        setTotal(response?.data?.orders?.length || 0);
+      })
+      .catch((error) => {
+        enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
+          variant: 'warning',
+        });
+      });
+    setTimeout(() => {
+      setLoaderState(false);
+    }, 5000);
+  }
 
   return (
     <>
@@ -250,16 +307,6 @@ export default function InvoiceListPage() {
               name: 'Жагсаалт',
             },
           ]}
-          // action={
-          //   <Button
-          //     component={NextLink}
-          //     href={PATH_DASHBOARD.invoice.new}
-          //     variant="contained"
-          //     startIcon={<Iconify icon="eva:plus-fill" />}
-          //   >
-          //     New Invoice
-          //   </Button>
-          // }
         />
 
         <Card sx={{ mb: 5 }}>
@@ -270,8 +317,8 @@ export default function InvoiceListPage() {
               sx={{ py: 2 }}
             >
               <InvoiceAnalytic
-                title="Бүх"
-                total={tableData.length}
+                title="Шинэ"
+                total={totalCount?.new}
                 percent={100}
                 price={sumBy(tableData, 'totalPrice')}
                 icon="ic:round-receipt"
@@ -279,8 +326,8 @@ export default function InvoiceListPage() {
               />
 
               <InvoiceAnalytic
-                title="Очсон"
-                total={getLengthByStatus('paid')}
+                title="Явж байгаа"
+                total={totalCount?.going}
                 percent={getPercentByStatus('paid')}
                 price={getTotalPriceByStatus('paid')}
                 icon="eva:checkmark-circle-2-fill"
@@ -288,8 +335,8 @@ export default function InvoiceListPage() {
               />
 
               <InvoiceAnalytic
-                title="Замдаа яваа"
-                total={getLengthByStatus('unpaid')}
+                title="Биелсэн"
+                total={totalCount?.complected || 0}
                 percent={getPercentByStatus('unpaid')}
                 price={getTotalPriceByStatus('unpaid')}
                 icon="eva:clock-fill"
@@ -298,20 +345,11 @@ export default function InvoiceListPage() {
 
               <InvoiceAnalytic
                 title="Цуцлагдсан"
-                total={getLengthByStatus('overdue')}
+                total={totalCount?.complected || 0}
                 percent={getPercentByStatus('overdue')}
                 price={getTotalPriceByStatus('overdue')}
                 icon="eva:bell-fill"
                 color={theme.palette.error.main}
-              />
-
-              <InvoiceAnalytic
-                title="Дууссан"
-                total={getLengthByStatus('draft')}
-                percent={getPercentByStatus('draft')}
-                price={getTotalPriceByStatus('draft')}
-                icon="eva:file-fill"
-                color={theme.palette.text.secondary}
               />
             </Stack>
           </Scrollbar>
@@ -333,8 +371,11 @@ export default function InvoiceListPage() {
                 label={tab.label}
                 icon={
                   <Label color={tab.color} sx={{ mr: 1 }}>
-                    {tab.count}
-                  </Label>
+                  {tab.value === 'new' && totalCount.new || 0}
+                  {tab.value === 'going' && totalCount.going || 0}
+                  {tab.value === 'completed' && totalCount.complected || 0}
+                  {tab.value !== 'new' && tab.value !== 'ongoing' && tab.value !== 'completed' && totalCount.complected || 0}
+                </Label>
                 }
               />
             ))}
@@ -364,7 +405,7 @@ export default function InvoiceListPage() {
             <TableSelectedAction
               dense={dense}
               numSelected={selected.length}
-              rowCount={tableData.length}
+              rowCount={total}
               onSelectAllRows={(checked) =>
                 onSelectAllRows(
                   checked,
@@ -399,7 +440,6 @@ export default function InvoiceListPage() {
                 </Stack>
               }
             />
-
             <Scrollbar>
               <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
                 <TableHeadCustom
@@ -418,7 +458,23 @@ export default function InvoiceListPage() {
                 />
 
                 <TableBody>
-                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                {myData &&
+                  myData.map((row, index) =>
+                    !loaderState && row ? (
+                      <InvoiceTableRow
+                        key={index}
+                        row={row}
+                        selected={selected.includes(row.id)}
+                        onSelectRow={() => onSelectRow(row.id)}
+                        onViewRow={() => handleViewRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                      />
+                    ) : (
+                      !isNotFound && <TableSkeleton key={index} sx={{ height: 48 }} />
+                    )
+                  )}
+                  {/* {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                     <InvoiceTableRow
                       key={row.id}
                       row={row}
@@ -428,11 +484,10 @@ export default function InvoiceListPage() {
                       onEditRow={() => handleEditRow(row.id)}
                       onDeleteRow={() => handleDeleteRow(row.id)}
                     />
-                  ))}
+                  ))} */}
 
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
-
-                  <TableNoData isNotFound={isNotFound} />
+                  {/* <TableNoData isNotFound={isNotFound} /> */}
                 </TableBody>
               </Table>
             </Scrollbar>

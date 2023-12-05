@@ -224,7 +224,7 @@ export default function TripListPage() {
   }
   async function getOrderData() {
     await axiosInstance
-      .get('/order')
+      .get('/orders')
       .then((response) => {
         setDataList(response?.data?.orders || []);
         if (localStorage.getItem('total') < response.data.orders.length) {
@@ -317,7 +317,7 @@ export default function TripListPage() {
                 rowCount={total}
                 onSort={onSort}
               />
-
+{/* 
               <TableBody>
                 {dataList?.map((row, index) =>
                   !loaderState && row ? (
@@ -335,7 +335,7 @@ export default function TripListPage() {
                 <TableEmptyRows height={48} emptyRows={emptyRows(page, rowsPerPage, total)} />
 
                 <TableNoData isNotFound={isNotFound} />
-              </TableBody>
+              </TableBody> */}
             </Table>
           </TableContainer>
 

@@ -18,6 +18,7 @@ module.exports = withTM({
     HOST_API_KEY_PROD: 'http://103.41.112.89/api',
     HOST_FILE_KEY: 'http://103.41.112.89/api',
     HOST_API_KEY_TEST: 'http://43.231.112.191:8070/v1',
+    HOST_API_KEY_TEST: 'http://103.41.112.89/api',
     // MAPBOX
     MAPBOX_API: '',
     // FIREBASE

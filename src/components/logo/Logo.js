@@ -8,7 +8,7 @@ import { Box, Link } from '@mui/material';
 // import Image from 'src/components/image';
 // import Image from 'src/components/image';
 
-import logoImg from 'public/assets/illustrations/logo.png';
+import logoImg from 'public/assets/illustrations/logo-no-background.png';
 // ----------------------------------------------------------------------
 import Image from 'next/image';
 const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
@@ -40,7 +40,7 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
       }}
       {...other}
     >
-      <Image src={logoImg} alt="logo" width={190} height={50}></Image>
+      <Image src={logoImg} alt="logo" width={60} height={50}></Image>
     </Box>
   );
 

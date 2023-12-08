@@ -25,46 +25,14 @@ DriverAnalytic.propTypes = {
 
 export default function MapHeader({ status, drivers, setStatus, setMarkers, handleLaterBooking }) {
   const theme = useTheme();
-
-  // use effect
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-
-  // fetching data every 3 seconds
-  // async function getData() {
-  //   getMapDriverList();
-  //   interval = setInterval(async () => {
-  //     getMapDriverList();
-  //   }, 3000);
-  // }
-
-  // fetching map driver list
-  // async function getMapDriverList() {
-  //   let fetchTerm = {
-  //     listQuery: { search: {}, limit: 2000, currentPage: 1, sort: { prop: 'driver_id', order: 'asc' } },
-  //   };
-  //   await axiosInstance
-  //     .post('/getMapDriverList', fetchTerm)
-  //     .then((res) => {
-  //       let data = res?.data?.data || [];
-  //       setDrivers(data);
-  //     })
-  //     .catch((error) => {
-  //       enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
-  //         variant: 'warning',
-  //       });
-  //     });
-  // }
-
   // sending mn status to handle on click status depend on status , driver
   useEffect(() => {
     switch (status) {
       case 'Arrived':
         handleOnClickStatus('Хүлээж байна');
         break;
-      case 'On Going Trip':
-        handleOnClickStatus('Зорчигчтой');
+      case 'going':
+        handleOnClickStatus('going');
         break;
       case 'Available':
         handleOnClickStatus('Сул');
@@ -98,10 +66,8 @@ export default function MapHeader({ status, drivers, setStatus, setMarkers, hand
       );
       setMarkers(arrived_drivers);
       setStatus('Arrived');
-    } else if (status === 'Зорчигчтой') {
-      const on_going_trip_drivers = drivers?.drivers?.rows.filter(
-        (driver) => driver.trip_status === 'On Going Trip' && driver.status === 'active'
-      );
+    } else if (status === 'going') {
+      const on_going_trip_drivers = drivers ? [drivers[0]] : [];
       setMarkers(on_going_trip_drivers);
       setStatus('On Going Trip');
     } else if (status === 'Нийт') {
@@ -137,14 +103,14 @@ export default function MapHeader({ status, drivers, setStatus, setMarkers, hand
       <Stack sx={{ height: 60 }} direction="row" alignItems="center" justifyContent="space-between">
         <DriverAnalytic
           title="Нийт"
-          total={drivers?.drivers?.count || 0}
+          total={drivers?.orders || 0}
           percent={100}
           icon="tabler:sum"
           color={theme.palette.info.dark}
           onClickStatus={handleOnClickStatus}
         />
 
-        <DriverAnalytic
+        {/* <DriverAnalytic
           title="Сул"
           total={drivers?.count_available || 0}
           percent={getPercentByStatus(drivers?.drivers?.count || 0, drivers?.count_available || 0)}
@@ -160,32 +126,7 @@ export default function MapHeader({ status, drivers, setStatus, setMarkers, hand
           icon="bx:trip"
           color={theme.palette.info.main}
           onClickStatus={handleOnClickStatus}
-        />
-        {/* <DriverAnalytic
-          title="Хүлээж байна"
-          total={drivers?.count_arrived || 0}
-          percent={getPercentByStatus(drivers?.drivers?.count || 0, drivers?.count_arrived || 0)}
-          icon="eva:clock-fill"
-          color={theme.palette.warning.main}
-          onClickStatus={handleOnClickStatus}
         /> */}
-        {/* <DriverAnalytic
-          title="Түгжрэлд"
-          total={drivers?.count_on_going_trip || 0}
-          percent={getPercentByStatus(drivers?.drivers?.count || 0, drivers?.count_on_going_trip || 0)}
-          icon="bx:trip"
-          color={theme.palette.error.main}
-          onClickStatus={handleOnClickStatus}
-        /> */}
-        {/* <DriverAnalytic
-          title="Түгжрэлд"
-          total={notAvailable()}
-          percent={getPercentByStatus(drivers?.drivers?.count || 0, notAvailable())}
-          icon="ic:sharp-airplanemode-inactive"
-          color={theme.palette.text.secondary}
-          onClickStatus={handleOnClickStatus}
-        /> */}
-
         <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ pr: 3 }}>

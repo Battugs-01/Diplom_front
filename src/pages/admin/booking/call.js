@@ -79,7 +79,6 @@ export default function BookingPage() {
   // map header status state
   const [status, setStatus] = useState('Available');
 
-  // drivers list state
   const [drivers, setDrivers] = useState([]);
 
   // passenger latitude and longitude object state
@@ -172,15 +171,11 @@ export default function BookingPage() {
 
   // fetching map driver list
   async function getMapDriverList() {
-    let fetchTerm = {
-      listQuery: { search: {}, limit: 2000, currentPage: 1, sort: { prop: 'driver_id', order: 'asc' } },
-    };
     await axiosInstance
-      .post('/getMapDriverList', fetchTerm)
+      .get('/orders?status=going')
       .then((res) => {
-        let data = res?.data?.data || [];
+        let data = res?.data || [];
         setDrivers(data);
-        console.log('driverList', res?.data?.data);
       })
       .catch((error) => {
         enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
@@ -190,23 +185,6 @@ export default function BookingPage() {
   }
 
   // fetching vehicle type list
-  async function getVehicleType() {
-    let fetchTerm = {
-      type: 'Ride',
-    };
-    await axiosInstance
-      .post('/getVehicleType', fetchTerm)
-      .then((res) => {
-        let data = res?.data?.data || [];
-        setVehicleTypeList(data);
-        console.log(res?.data?.data, 'vehicleType');
-      })
-      .catch((error) => {
-        enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
-          variant: 'warning',
-        });
-      });
-  }
 
   // calculating long distance additional cost
   async function longDistance(lat, lng) {
@@ -548,6 +526,10 @@ export default function BookingPage() {
     }
   };
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   // rendering--------------------------------------------------------------------------------------------------
 
   return (
@@ -694,8 +676,8 @@ export default function BookingPage() {
           <Grid item xs={12} sm={12}>
             <Card>
               <MapHeader
-                status={status}
-                drivers={drivers}
+                status={'going'}
+                drivers={drivers?.orders}
                 setStatus={setStatus}
                 setMarkers={setMarkers}
                 handleLaterBooking={handleLaterBooking}
@@ -706,10 +688,10 @@ export default function BookingPage() {
                   markers: markers,
                   status: status,
                   ssid: SSID,
-                  passenger_lat: passenger_lat_lon?.lat,
-                  passenger_lon: passenger_lat_lon?.lon,
-                  dest_latitude: dest_lat_lon?.lat,
-                  dest_longitude: dest_lat_lon?.lon,
+                  passenger_lat: drivers[0]?.driver?.latitude || 0,
+                  passenger_lon: drivers[0]?.driver?.longitude || 0,
+                  dest_latitude: drivers[0]?.user?.latitude || 0,
+                  dest_longitude: drivers[0]?.user?.longitude || 0,
                 }}
                 handleOnSaddress={handleOnSetSaddress}
                 handleOnDaddress={handleOnSetDaddress}

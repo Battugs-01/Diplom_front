@@ -366,84 +366,78 @@ export default function MapSide({ trip, handleOnSaddress, handleOnDaddress, movi
           />
         )}
 
-        {markers.map((marker) => (
-          <Marker key={marker?.driver_id} position={[marker?.latitude, marker?.longitude]} icon={Icons(status)}>
-            <Popup>
-              <Stack>
-                <Stack direction="row" alignItems="center" justifyContent="start">
-                  <Typography variant="subtitle3" noWrap>
-                    Ж/Код :&nbsp;&nbsp;
-                  </Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    {marker?.driver_id || ' -- '}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center" justifyContent="start">
-                  <Typography variant="subtitle3" noWrap>
-                    Ж/Нэр :&nbsp;&nbsp;
-                  </Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    {marker?.name || ' -- '}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center" justifyContent="start">
-                  <Typography variant="subtitle3" noWrap>
-                    Ж/Утас :&nbsp;&nbsp;
-                  </Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    {marker?.phone || ' -- '}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center" justifyContent="start">
-                  <Typography variant="subtitle3" noWrap>
-                    АУД :&nbsp;&nbsp;
-                  </Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    {marker?.dv?.licence_plate || ' -- '}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center" justifyContent="start">
-                  <Typography variant="subtitle3" noWrap>
-                    Авах хаяг :&nbsp;&nbsp;
-                  </Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    {marker?.trips?.[0]?.saddress || ' -- '}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center" justifyContent="start">
-                  <Typography variant="subtitle3" noWrap>
-                    Очих хаяг :&nbsp;&nbsp;
-                  </Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    {marker?.trips?.[0]?.daddress || ' -- '}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center" justifyContent="start">
-                  <Typography variant="subtitle3" noWrap>
-                    Х/Утас :&nbsp;&nbsp;
-                  </Typography>
-                  <Typography variant="subtitle2" noWrap>
-                    {marker?.trips?.[0]?.ru?.phone || ' -- '}
-                  </Typography>
-                </Stack>
+        {markers?.length > 0 &&
+          markers.map((marker, i) => (
+            <Marker key={i} position={[marker?.driver?.latitude, marker?.driver?.longitude]} icon={Icons(status)}>
+              <Popup>
+                <Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="start">
+                    <Typography variant="subtitle3" noWrap>
+                      Ж/Код :&nbsp;&nbsp;
+                    </Typography>
+                    <Typography variant="subtitle2" noWrap>
+                      {marker?.driver_id || ' -- '}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="start">
+                    <Typography variant="subtitle3" noWrap>
+                      Ж/Нэр :&nbsp;&nbsp;
+                    </Typography>
+                    <Typography variant="subtitle2" noWrap>
+                      {marker?.name || ' -- '}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="start">
+                    <Typography variant="subtitle3" noWrap>
+                      Ж/Утас :&nbsp;&nbsp;
+                    </Typography>
+                    <Typography variant="subtitle2" noWrap>
+                      {marker?.phone || ' -- '}
+                    </Typography>
+                  </Stack>
 
-                {marker?.availability === 'Available' && (
-                  <Button
-                    onClick={() => {
-                      setDriverId(marker?.driver_id);
-                      setDriverName(marker?.name);
-                      setDriverLatitude(marker?.latitude || null);
-                      setDriverLongitude(marker?.longitude || null);
-                      setJob(true);
-                    }}
-                  >
-                    Ажлаас буулгах
-                  </Button>
-                )}
-              </Stack>
-            </Popup>
-          </Marker>
-        ))}
+                  <Stack direction="row" alignItems="center" justifyContent="start">
+                    <Typography variant="subtitle3" noWrap>
+                      Авах хаяг :&nbsp;&nbsp;
+                    </Typography>
+                    <Typography variant="subtitle2" noWrap>
+                      {marker?.trips?.[0]?.saddress || ' -- '}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="start">
+                    <Typography variant="subtitle3" noWrap>
+                      Очих хаяг :&nbsp;&nbsp;
+                    </Typography>
+                    <Typography variant="subtitle2" noWrap>
+                      {marker?.trips?.[0]?.daddress || ' -- '}
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="start">
+                    <Typography variant="subtitle3" noWrap>
+                      Х/Утас :&nbsp;&nbsp;
+                    </Typography>
+                    <Typography variant="subtitle2" noWrap>
+                      {marker?.trips?.[0]?.ru?.phone || ' -- '}
+                    </Typography>
+                  </Stack>
+
+                  {marker?.availability === 'Available' && (
+                    <Button
+                      onClick={() => {
+                        setDriverId(marker?.driver_id);
+                        setDriverName(marker?.name);
+                        setDriverLatitude(marker?.latitude || null);
+                        setDriverLongitude(marker?.longitude || null);
+                        setJob(true);
+                      }}
+                    >
+                      Ажлаас буулгах
+                    </Button>
+                  )}
+                </Stack>
+              </Popup>
+            </Marker>
+          ))}
         <Polyline color="gray" positions={startRoute} dashArray={(2, 6)} lineCap="square" />
         <Polyline color="red" positions={routing}>
           <Popup>

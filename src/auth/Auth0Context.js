@@ -155,6 +155,5 @@ export function AuthProvider({ children }) {
     }),
     [state.isAuthenticated, state.isInitialized, state.user, login, logout]
   );
-
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
 }

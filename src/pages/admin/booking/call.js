@@ -673,7 +673,7 @@ export default function BookingPage() {
             </FormProvider>
           </Grid> */}
 
-          <Grid item xs={12} sm={12}>
+          {/* <Grid item xs={12} sm={12}>
             <Card>
               <MapHeader
                 status={'going'}
@@ -700,7 +700,7 @@ export default function BookingPage() {
                 }}
               />
             </Card>
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} md={8}>
             <Stack spacing={5}>
               <AnalyticsConversionRates

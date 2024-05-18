@@ -126,6 +126,10 @@ export const PATH_DASHBOARD = {
     edit: (name) => path(ROOTS_ADMIN, `/user/${name}/edit`),
     demoEdit: path(ROOTS_ADMIN, `/user/reece-chung/edit`),
   },
+  doctor: {
+    root: path(ROOTS_ADMIN, '/doctor'),
+    list: path(ROOTS_ADMIN, '/doctor/list'),
+  },
   eCommerce: {
     root: path(ROOTS_ADMIN, '/e-commerce'),
     shop: path(ROOTS_ADMIN, '/e-commerce/shop'),

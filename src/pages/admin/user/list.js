@@ -62,11 +62,12 @@ const ROLE_OPTIONS = [
 ];
 
 const TABLE_HEAD = [
+  { id: '' },
+  { id: 'id', label: 'ID', align: 'left' },
+  { id: 'name', label: 'Нэр', align: 'left' },
+  { id: 'email', label: 'Имэйл', align: 'left' },
   { id: 'phone', label: 'Утас', align: 'left' },
-  { id: 'question', label: 'Асуулт', align: 'left' },
-  { id: 'answer', label: 'Хариулт', align: 'left' },
-  { id: 'isVerified', label: 'Төлөв', align: 'center' },
-  // { id: 'status', label: 'Status', align: 'left' },
+  { id: 'status', label: 'Статус', align: 'left' },
   { id: '' },
 ];
 
@@ -206,9 +207,9 @@ export default function UserListPage() {
 
   const getHistoryData = async () => {
     await axiosInstance
-      .get('/history')
+      .get('/users')
       .then((response) => {
-        setHistories(response.data.history);
+        setHistories(response.data.data);
       })
       .catch((error) => {
         console.log('history error => ', error);
@@ -305,7 +306,8 @@ export default function UserListPage() {
                   }
                 />
 
-                {/* <TableBody>
+                <TableBody>
+                  {/*
                   {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                     <UserTableRow
                       key={row.id}
@@ -315,7 +317,7 @@ export default function UserListPage() {
                       onDeleteRow={() => handleDeleteRow(row.id)}
                       onEditRow={() => handleEditRow(row.name)}
                     />
-                  ))}
+                  ))} */}
 
                   {histories.map((row, index) => (
                     <UserTableRow
@@ -332,7 +334,7 @@ export default function UserListPage() {
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
-                </TableBody> */}
+                </TableBody>
               </Table>
             </Scrollbar>
           </TableContainer>

@@ -152,8 +152,8 @@ export default function MapSide({ trip, handleOnSaddress, handleOnDaddress, movi
         const marker = markerRefStart.current;
         if (marker != null) {
           // setPosition(marker.getLatLng());
-          setPasLat(marker.getLatLng().lat);
-          setPasLon(marker.getLatLng().lng);
+          setPasLat(marker?.getLatLng()?.lat || 0);
+          setPasLon(marker?.getLatLng()?.lng || 0);
           markStartPos(marker.getLatLng());
         }
       },

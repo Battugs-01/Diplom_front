@@ -175,7 +175,8 @@ export default function BookingPage() {
       .get('/orders?status=going')
       .then((res) => {
         let data = res?.data || [];
-        setDrivers(data);
+        console.log('DAATAA', data.orders);
+        setDrivers(data.orders);
       })
       .catch((error) => {
         enqueueSnackbar(error?.message ? error?.message : 'Алдаатай хүсэлт', {
@@ -673,11 +674,11 @@ export default function BookingPage() {
             </FormProvider>
           </Grid> */}
 
-          {/* <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12}>
             <Card>
               <MapHeader
                 status={'going'}
-                drivers={drivers?.orders}
+                drivers={drivers}
                 setStatus={setStatus}
                 setMarkers={setMarkers}
                 handleLaterBooking={handleLaterBooking}
@@ -690,8 +691,8 @@ export default function BookingPage() {
                   ssid: SSID,
                   passenger_lat: drivers[0]?.driver?.latitude || 0,
                   passenger_lon: drivers[0]?.driver?.longitude || 0,
-                  dest_latitude: drivers[0]?.user?.latitude || 0,
-                  dest_longitude: drivers[0]?.user?.longitude || 0,
+                  dest_latitude: drivers[0]?.customer_latitude || 0,
+                  dest_longitude: drivers[0]?.customer_longitude || 0,
                 }}
                 handleOnSaddress={handleOnSetSaddress}
                 handleOnDaddress={handleOnSetDaddress}
@@ -700,7 +701,7 @@ export default function BookingPage() {
                 }}
               />
             </Card>
-          </Grid> */}
+          </Grid>
           <Grid item xs={12} md={8}>
             <Stack spacing={5}>
               <AnalyticsConversionRates

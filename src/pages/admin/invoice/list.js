@@ -118,16 +118,14 @@ export default function InvoiceListPage() {
 
   const [myData, setMyData] = useState(0);
 
-  const [tab, setTab] = useState([]);
-
+  const [tab, setTab] = useState({ value: 'new', label: 'Шинэ', color: 'info' });
 
   const filterStatusRef = useRef('new');
-  
+
   const [filterName, setFilterName] = useState('');
 
   const [totalCount, setTotalCount] = useState([]);
 
-  
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState('new');
@@ -252,21 +250,23 @@ export default function InvoiceListPage() {
     getData();
   }, [filterStatus]);
 
-  console.log('sda' , myData)
+  console.log('sda', myData);
 
   async function getData() {
-    getOrderData();
+    // getOrderData();
     setInterval(async () => {
       getOrderData();
     }, 5000);
   }
 
-   async function getOrderData ()  {
+  async function getOrderData() {
+    console.log('getOrderDataInvoice');
+    console.log('TAB', tab);
     await axiosInstance
       .get(`/orders?status=${filterStatusRef.current}`)
       .then((response) => {
         setMyData(response?.data?.orders || []);
-        setTotalCount(response?.data?.total_count || [])
+        setTotalCount(response?.data?.total_count || []);
         if (localStorage.getItem('total') < response.data.orders.length) {
           enqueueSnackbar(`Шинэ захиалга ирлээ`, {
             variant: 'success',
@@ -280,9 +280,9 @@ export default function InvoiceListPage() {
           variant: 'warning',
         });
       });
-    setTimeout(() => {
-      setLoaderState(false);
-    }, 5000);
+    // setTimeout(() => {
+    //   setLoaderState(false);
+    // }, 50000);
   }
 
   return (
@@ -369,13 +369,18 @@ export default function InvoiceListPage() {
                 key={tab.value}
                 value={tab.value}
                 label={tab.label}
+                onClick={() => setTab(tab)}
                 icon={
                   <Label color={tab.color} sx={{ mr: 1 }}>
-                  {tab.value === 'new' && totalCount.new || 0}
-                  {tab.value === 'going' && totalCount.going || 0}
-                  {tab.value === 'completed' && totalCount.complected || 0}
-                  {tab.value !== 'new' && tab.value !== 'ongoing' && tab.value !== 'completed' && totalCount.complected || 0}
-                </Label>
+                    {(tab.value === 'new' && totalCount.new) || 0}
+                    {(tab.value === 'going' && totalCount.going) || 0}
+                    {(tab.value === 'completed' && totalCount.complected) || 0}
+                    {(tab.value !== 'new' &&
+                      tab.value !== 'ongoing' &&
+                      tab.value !== 'completed' &&
+                      totalCount.complected) ||
+                      0}
+                  </Label>
                 }
               />
             ))}
@@ -458,22 +463,22 @@ export default function InvoiceListPage() {
                 />
 
                 <TableBody>
-                {myData &&
-                  myData.map((row, index) =>
-                    !loaderState && row ? (
-                      <InvoiceTableRow
-                        key={index}
-                        row={row}
-                        selected={selected.includes(row.id)}
-                        onSelectRow={() => onSelectRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                      />
-                    ) : (
-                      !isNotFound && <TableSkeleton key={index} sx={{ height: 48 }} />
-                    )
-                  )}
+                  {myData &&
+                    myData.map((row, index) =>
+                      !loaderState && row ? (
+                        <InvoiceTableRow
+                          key={index}
+                          row={row}
+                          selected={selected.includes(row.id)}
+                          onSelectRow={() => onSelectRow(row.id)}
+                          onViewRow={() => handleViewRow(row.id)}
+                          onEditRow={() => handleEditRow(row.id)}
+                          onDeleteRow={() => handleDeleteRow(row.id)}
+                        />
+                      ) : (
+                        !isNotFound && <TableSkeleton key={index} sx={{ height: 48 }} />
+                      )
+                    )}
                   {/* {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                     <InvoiceTableRow
                       key={row.id}

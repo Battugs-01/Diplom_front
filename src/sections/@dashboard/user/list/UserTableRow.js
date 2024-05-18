@@ -1,17 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 // @mui
-import {
-  Stack,
-  Avatar,
-  Button,
-  Checkbox,
-  TableRow,
-  MenuItem,
-  TableCell,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import { Stack, Avatar, Button, Checkbox, TableRow, MenuItem, TableCell, IconButton, Typography } from '@mui/material';
 // components
 import Label from '../../../../components/label';
 import Iconify from '../../../../components/iconify';
@@ -29,8 +19,8 @@ UserTableRow.propTypes = {
 };
 
 export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, userData }) {
-  const { name, avatarUrl, company, role, isVerified, status } = userData;
-  const { id, phone, question, answer} = row;
+  const { id, name, email, phone, role, status, avatarUrl, isVerified } = row;
+  // const { id, phone, question, answer } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -62,29 +52,25 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar alt={id} src={avatarUrl} />
-
-            <Typography variant="subtitle2" noWrap>
-              {phone}
-            </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{question}</TableCell>
+        <TableCell align="left">{id}</TableCell>
 
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {answer}
-        </TableCell>
+        <TableCell align="left">{name}</TableCell>
 
-        <TableCell align="center">
-          <Iconify
-            icon={isVerified ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-            sx={{
-              width: 20,
-              height: 20,
-              color: 'success.main',
-              ...(!isVerified && { color: 'warning.main' }),
-            }}
-          />
+        <TableCell align="left">{email}</TableCell>
+
+        <TableCell align="left">{phone}</TableCell>
+
+        <TableCell align="left">
+          <Label
+            variant="outline"
+            color={(role === 'admin' && 'error') || 'success'}
+            sx={{ textTransform: 'capitalize' }}
+          >
+            {role}
+          </Label>
         </TableCell>
 
         {/* <TableCell align="left">
@@ -104,12 +90,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
         </TableCell>
       </TableRow>
 
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
+      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 140 }}>
         <MenuItem
           onClick={() => {
             handleOpenConfirm();

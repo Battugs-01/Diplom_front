@@ -37,8 +37,8 @@ export default function NavList({ data, depth, hasChild }) {
 
     // Reset styles when hover
     const styles = () => {
-      document.body.style.overflow = '';
-      document.body.style.padding = '';
+      // document && document.body.style.overflow = '';
+      // document && document.body.style.padding = '';
       // Apply for Window
       appBarEl.forEach((elem) => {
         elem.style.padding = '';
@@ -78,14 +78,10 @@ export default function NavList({ data, depth, hasChild }) {
           open={open}
           anchorEl={navRef.current}
           anchorOrigin={
-            depth === 1
-              ? { vertical: 'bottom', horizontal: 'left' }
-              : { vertical: 'center', horizontal: 'right' }
+            depth === 1 ? { vertical: 'bottom', horizontal: 'left' } : { vertical: 'center', horizontal: 'right' }
           }
           transformOrigin={
-            depth === 1
-              ? { vertical: 'top', horizontal: 'left' }
-              : { vertical: 'center', horizontal: 'left' }
+            depth === 1 ? { vertical: 'top', horizontal: 'left' } : { vertical: 'center', horizontal: 'left' }
           }
           PaperProps={{
             onMouseEnter: handleOpen,
@@ -110,12 +106,7 @@ function NavSubList({ data, depth }) {
   return (
     <>
       {data.map((list) => (
-        <NavList
-          key={list.title + list.path}
-          data={list}
-          depth={depth + 1}
-          hasChild={!!list.children}
-        />
+        <NavList key={list.title + list.path} data={list} depth={depth + 1} hasChild={!!list.children} />
       ))}
     </>
   );

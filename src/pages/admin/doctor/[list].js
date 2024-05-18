@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 // @mui
-import { Card, Container, Table, TableBody, TableContainer, Typography, Grid } from '@mui/material';
+import { Card, Container, Table, TableBody, TableContainer, Typography } from '@mui/material';
 // layouts
 import DashboardLayout from 'src/layouts/dashboard';
 // components
@@ -11,10 +11,10 @@ import {
   TableEmptyRows,
   TableHeadCustom,
   TableNoData,
-  emptyRows,
   TablePaginationCustom,
-  useTable,
   TableSkeleton,
+  emptyRows,
+  useTable,
 } from 'src/components/table';
 // utils
 import { useSnackbar } from 'notistack';
@@ -22,9 +22,9 @@ import axiosInstance from 'src/utils/axios';
 // routes
 import { PATH_DASHBOARD } from 'src/routes/paths';
 // sections
-import { TripTableRow, TripTableToolbar } from 'src/sections/@dashboard/trip/list';
-import { AnalyticsWidgetSummary } from '../../../sections/@dashboard/general/analytics';
 import SvgColor from 'src/components/svg-color/SvgColor';
+import { TripTableToolbar } from 'src/sections/@dashboard/trip/list';
+import DoctorTableRow from 'src/sections/@dashboard/doctor/list/DoctorTableRow';
 // ----------------------------------------------------------------------
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
 const ICONS = {
@@ -58,16 +58,17 @@ const TABLE_HEAD = [
   { label: 'Имэйл', align: 'left' },
   { label: 'Х/утас', align: 'left' },
   { id: 'active', label: 'Төлөв', align: 'left' },
+  { id: 'position', label: 'Албан тушаал', align: 'left' },
   { id: 'action', label: 'Үйлдэл', align: 'left' },
 ];
 
 // ----------------------------------------------------------------------
 
-TripListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+DoctorListPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function TripListPage() {
+export default function DoctorListPage() {
   const { enqueueSnackbar } = useSnackbar();
 
   // taking driver name from query params
@@ -220,7 +221,7 @@ export default function TripListPage() {
   }
   async function getOrderData() {
     await axiosInstance
-      .get('/employees/drivers')
+      .get('/employees/doctors')
       .then((response) => {
         console.log(response?.data.data);
         setDataList(response?.data?.data || []);
@@ -315,7 +316,7 @@ export default function TripListPage() {
                 {dataList &&
                   dataList?.map((row, index) =>
                     !loaderState && row ? (
-                      <TripTableRow
+                      <DoctorTableRow
                         key={index}
                         row={row}
                         rowQueue={{ index: index, rowsPerPage: rowsPerPage, page: page }}

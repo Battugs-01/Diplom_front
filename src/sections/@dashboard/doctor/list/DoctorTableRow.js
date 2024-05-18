@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 // @mui
-import { IconButton, TableCell, TableRow } from '@mui/material';
+import { TableRow, TableCell, Typography, IconButton } from '@mui/material';
 // components
-import Iconify from 'src/components/iconify';
 import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
 // utils
+import { fDate, fDateTimeSuffix } from 'src/utils/formatTime';
 // ----------------------------------------------------------------------
 
-TripTableRow.propTypes = {
+DoctorTableRow.propTypes = {
   row: PropTypes.object,
   onViewRow: PropTypes.func,
   rowQueue: PropTypes.object,
@@ -26,10 +27,10 @@ TripTableRow.propTypes = {
 */
 // ----------------------------------------------------------------------
 
-export default function TripTableRow({ row, onViewRow, rowQueue }) {
+export default function DoctorTableRow({ row, onViewRow, rowQueue }) {
   // extracting row
   console.log('row', row);
-  const { id, hospital_id, name, phone, location, status, createdAt, updatedAt, email } = row;
+  const { id, hospital_id, name, phone, location, status, createdAt, updatedAt, email, position } = row;
 
   // const { name, phone } = customer;
 
@@ -65,6 +66,7 @@ export default function TripTableRow({ row, onViewRow, rowQueue }) {
           {status}
         </Label>
       </TableCell>
+      <TableCell align="left">{position}</TableCell>
 
       <TableCell align="center">
         <IconButton color="inherit">

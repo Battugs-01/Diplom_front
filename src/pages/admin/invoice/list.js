@@ -1,25 +1,23 @@
-import { useEffect, useState } from 'react';
 import sumBy from 'lodash/sumBy';
+import { useEffect, useState } from 'react';
 // next
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import {
-  Tab,
-  Tabs,
   Card,
-  Table,
-  Stack,
-  Button,
-  Tooltip,
-  Divider,
-  TableBody,
   Container,
+  Divider,
   IconButton,
+  Stack,
+  Tab,
+  Table,
+  TableBody,
   TableContainer,
+  Tabs,
+  Tooltip,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils
@@ -29,28 +27,26 @@ import { _invoices } from '../../../_mock/arrays';
 // layouts
 import DashboardLayout from '../../../layouts/dashboard';
 // components
-import Label from '../../../components/label';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
-import ConfirmDialog from '../../../components/confirm-dialog';
-import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../components/settings';
 import {
-  useTable,
-  getComparator,
-  emptyRows,
-  TableNoData,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
+  TableNoData,
   TablePaginationCustom,
+  TableSelectedAction,
+  emptyRows,
+  getComparator,
+  useTable,
 } from '../../../components/table';
-import { useRef } from 'react';
 // sections
+import { useRequest } from 'ahooks';
+import { useSnackbar } from 'notistack';
+import callService from 'src/services/call';
 import InvoiceAnalytic from '../../../sections/@dashboard/invoice/InvoiceAnalytic';
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../../sections/@dashboard/invoice/list';
-import axiosInstance from 'src/utils/axios';
-import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -116,20 +112,18 @@ export default function InvoiceListPage() {
 
   const [loaderState, setLoaderState] = useState(0);
 
-  const [myData, setMyData] = useState(0);
+  const [myData, setMyData] = useState();
 
   const [tab, setTab] = useState({ value: 'new', label: 'Шинэ', color: 'info' });
-
-  const filterStatusRef = useRef('new');
 
   const [filterName, setFilterName] = useState('');
 
   const [totalCount, setTotalCount] = useState([]);
 
+  console.log(myData, 'sdass');
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState('new');
-
   const [filterService, setFilterService] = useState('all');
 
   const [filterEndDate, setFilterEndDate] = useState(null);
@@ -168,7 +162,7 @@ export default function InvoiceListPage() {
       'totalPrice'
     );
 
-  const getPercentByStatus = (status) => (getLengthByStatus(status) / tableData.length) * 100;
+  const getPercentByStatus = (status) => getLengthByStatus(status) / tableData.length;
 
   const TABS = [
     { value: 'new', label: 'Шинэ', color: 'info', count: tableData.length },
@@ -245,45 +239,58 @@ export default function InvoiceListPage() {
     setFilterStartDate(null);
   };
 
-  useEffect(() => {
-    filterStatusRef.current = filterStatus;
-    getData();
-  }, [filterStatus]);
-
-  console.log('sda', myData);
-
-  async function getData() {
-    // getOrderData();
-    setInterval(async () => {
-      getOrderData();
-    }, 5000);
-  }
-
-  async function getOrderData() {
-    console.log('getOrderDataInvoice');
-    console.log('TAB', tab);
-    await axiosInstance
-      .get(`/orders?status=${filterStatusRef.current}`)
-      .then((response) => {
-        setMyData(response?.data?.orders || []);
-        setTotalCount(response?.data?.total_count || []);
-        if (localStorage.getItem('total') < response.data.orders.length) {
-          enqueueSnackbar(`Шинэ захиалга ирлээ`, {
-            variant: 'success',
-          });
-          localStorage.setItem('total', response.data.orders.length);
-        }
-        setTotal(response?.data?.orders?.length || 0);
-      })
-      .catch((error) => {
-        enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
-          variant: 'warning',
+  const fetch = useRequest(() => callService.list(tab.value), {
+    refreshDeps: [tab],
+    pollingInterval: 5000,
+    onSuccess: (data) => {
+      console.log('data', data);
+      setMyData(data?.data?.orders);
+      setTotalCount(data?.data?.total_count);
+      if (localStorage.getItem('total') < data.orders.length) {
+        enqueueSnackbar(`Шинэ захиалга ирлээ`, {
+          variant: 'success',
         });
-      });
-    // setTimeout(() => {
-    //   setLoaderState(false);
-    // }, 50000);
-  }
+        localStorage.setItem('total', data.orders.length);
+      }
+    },
+  });
+
+  useEffect(() => {
+    fetch.run();
+  }, [tab]);
+
+  // console.log('sda', myData);
+
+  // async function getData() {
+  //   getOrderData();
+  //   setInterval(async () => {
+  //     getOrderData();
+  //   }, 5000);
+  // }
+
+  // async function getOrderData() {
+  //   console.log('getOrderDataInvoice');
+  //   console.log('TAB', tab);
+  //   await axiosInstance
+  //     .get(`/orders?status=${tab?.value}`)
+  //     .then((response) => {
+  //       setMyData(response?.data?.orders || []);
+  //       setTotalCount(response?.data?.total_count || []);
+  //       if (localStorage.getItem('total') < response.data.orders.length) {
+  //         enqueueSnackbar(`Шинэ захиалга ирлээ`, {
+  //           variant: 'success',
+  //         });
+  //         localStorage.setItem('total', response.data.orders.length);
+  //       }
+  //       setTotal(response?.data?.orders?.length || 0);
+
+  //     })
+  //     .catch((error) => {
+  //       enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
+  //         variant: 'warning',
+  //       });
+  //     });
+  // }
 
   return (
     <>
@@ -365,24 +372,7 @@ export default function InvoiceListPage() {
             }}
           >
             {TABS.map((tab) => (
-              <Tab
-                key={tab.value}
-                value={tab.value}
-                label={tab.label}
-                onClick={() => setTab(tab)}
-                icon={
-                  <Label color={tab.color} sx={{ mr: 1 }}>
-                    {(tab.value === 'new' && totalCount.new) || 0}
-                    {(tab.value === 'going' && totalCount.going) || 0}
-                    {(tab.value === 'completed' && totalCount.complected) || 0}
-                    {(tab.value !== 'new' &&
-                      tab.value !== 'ongoing' &&
-                      tab.value !== 'completed' &&
-                      totalCount.complected) ||
-                      0}
-                  </Label>
-                }
-              />
+              <Tab key={tab.value} value={tab.value} label={tab.label} onClick={() => setTab(tab)} />
             ))}
           </Tabs>
 
@@ -490,9 +480,8 @@ export default function InvoiceListPage() {
                       onDeleteRow={() => handleDeleteRow(row.id)}
                     />
                   ))} */}
-
+                  {myData?.length === 0 && <TableNoData isNotFound={isNotFound} />}
                   <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, tableData.length)} />
-                  {/* <TableNoData isNotFound={isNotFound} /> */}
                 </TableBody>
               </Table>
             </Scrollbar>
@@ -511,7 +500,7 @@ export default function InvoiceListPage() {
         </Card>
       </Container>
 
-      <ConfirmDialog
+      {/* <ConfirmDialog
         open={openConfirm}
         onClose={handleCloseConfirm}
         title="Delete"
@@ -532,7 +521,7 @@ export default function InvoiceListPage() {
             Delete
           </Button>
         }
-      />
+      /> */}
     </>
   );
 }

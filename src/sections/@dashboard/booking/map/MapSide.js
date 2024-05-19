@@ -172,9 +172,9 @@ export default function MapSide({ trip, handleOnSaddress, handleOnDaddress, movi
       dragend() {
         const marker = markerRefEnd.current;
         if (marker != null) {
-          setDesLat(marker.getLatLng().lat);
-          setDesLon(marker.getLatLng().lng);
-          markEndPos(marker.getLatLng());
+          setDesLat(marker?.getLatLng().lat);
+          setDesLon(marker?.getLatLng().lng);
+          markEndPos(marker?.getLatLng());
         }
       },
       mouseover() {
@@ -265,22 +265,6 @@ export default function MapSide({ trip, handleOnSaddress, handleOnDaddress, movi
     setCenterLongLat(data);
   };
 
-  // async function getBounds() {
-  //   const boundsArr = (await Array.isArray(routing)) && routing.length && latLngBounds(routing);
-  //   const returnArr = [],
-  //     northEast = [],
-  //     southWest = [];
-  //   northEast.push(boundsArr?._northEast?.lat);
-  //   northEast.push(boundsArr?._northEast?.lng);
-  //   southWest.push(boundsArr?._southWest?.lat);
-  //   southWest.push(boundsArr?._southWest?.lng);
-  //   returnArr.push(northEast);
-  //   returnArr.push(southWest);
-  //   return returnArr;
-  // }
-
-  // console.log(startRoute, 'startRoute');
-
   const centerFunc = () => {
     if (passenger_lat !== null && passenger_lon !== null) {
       const arr = [];
@@ -325,14 +309,6 @@ export default function MapSide({ trip, handleOnSaddress, handleOnDaddress, movi
         zoom={14}
         minZoom={5}
         maxZoom={28}
-        // bounds={[
-        //   [50.505, -29.09],
-        //   [52.505, 29.09],
-        // ]}
-        // maxBounds={[
-        //   [50.505, -29.09],
-        //   [52.505, 29.09],
-        // ]}
         scrollWheelZoom={true}
         contextmenuWidth={130}
         contextmenu={true}
@@ -366,78 +342,6 @@ export default function MapSide({ trip, handleOnSaddress, handleOnDaddress, movi
           />
         )}
 
-        {markers?.length > 0 &&
-          markers.map((marker, i) => (
-            <Marker key={i} position={[marker?.driver?.latitude, marker?.driver?.longitude]} icon={Icons(status)}>
-              <Popup>
-                <Stack>
-                  <Stack direction="row" alignItems="center" justifyContent="start">
-                    <Typography variant="subtitle3" noWrap>
-                      Ж/Код :&nbsp;&nbsp;
-                    </Typography>
-                    <Typography variant="subtitle2" noWrap>
-                      {marker?.driver_id || ' -- '}
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" justifyContent="start">
-                    <Typography variant="subtitle3" noWrap>
-                      Ж/Нэр :&nbsp;&nbsp;
-                    </Typography>
-                    <Typography variant="subtitle2" noWrap>
-                      {marker?.name || ' -- '}
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" justifyContent="start">
-                    <Typography variant="subtitle3" noWrap>
-                      Ж/Утас :&nbsp;&nbsp;
-                    </Typography>
-                    <Typography variant="subtitle2" noWrap>
-                      {marker?.phone || ' -- '}
-                    </Typography>
-                  </Stack>
-
-                  <Stack direction="row" alignItems="center" justifyContent="start">
-                    <Typography variant="subtitle3" noWrap>
-                      Авах хаяг :&nbsp;&nbsp;
-                    </Typography>
-                    <Typography variant="subtitle2" noWrap>
-                      {marker?.trips?.[0]?.saddress || ' -- '}
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" justifyContent="start">
-                    <Typography variant="subtitle3" noWrap>
-                      Очих хаяг :&nbsp;&nbsp;
-                    </Typography>
-                    <Typography variant="subtitle2" noWrap>
-                      {marker?.trips?.[0]?.daddress || ' -- '}
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" justifyContent="start">
-                    <Typography variant="subtitle3" noWrap>
-                      Х/Утас :&nbsp;&nbsp;
-                    </Typography>
-                    <Typography variant="subtitle2" noWrap>
-                      {marker?.trips?.[0]?.ru?.phone || ' -- '}
-                    </Typography>
-                  </Stack>
-
-                  {marker?.availability === 'Available' && (
-                    <Button
-                      onClick={() => {
-                        setDriverId(marker?.driver_id);
-                        setDriverName(marker?.name);
-                        setDriverLatitude(marker?.latitude || null);
-                        setDriverLongitude(marker?.longitude || null);
-                        setJob(true);
-                      }}
-                    >
-                      Ажлаас буулгах
-                    </Button>
-                  )}
-                </Stack>
-              </Popup>
-            </Marker>
-          ))}
         <Polyline color="gray" positions={startRoute} dashArray={(2, 6)} lineCap="square" />
         <Polyline color="red" positions={routing}>
           <Popup>
@@ -474,27 +378,6 @@ export default function MapSide({ trip, handleOnSaddress, handleOnDaddress, movi
           <></>
         )}
       </MapContainer>
-      {job === true && (
-        <KanbanConfirmDialog
-          open={job}
-          onClose={onCloseConfirm}
-          title={
-            <Typography>
-              <strong>{driverName}</strong>-ийг ажлаас буулгах уу?
-            </Typography>
-          }
-          actions={
-            <>
-              <Button variant="outlined" color="inherit" onClick={onCloseConfirm}>
-                Болих
-              </Button>
-              <Button variant="contained" color="error" onClick={turnOffDriver}>
-                Тийм
-              </Button>
-            </>
-          }
-        />
-      )}
     </>
   );
 }

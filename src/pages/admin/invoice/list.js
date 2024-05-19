@@ -68,6 +68,8 @@ const TABLE_HEAD = [
   { id: 'location', label: 'Хаяг', align: 'left', width: 140 },
   { id: 'description', label: 'Биеийн байдал', align: 'left', width: 140 },
   { id: 'status', label: 'Түвшин', align: 'left' },
+  { id: 'status', label: 'Хувиарласан жолооч', align: 'left', width: 140 },
+  { id: 'status', label: 'Хувиарласан эмч', align: 'left', width: 140 },
   { id: '' },
 ];
 
@@ -120,7 +122,6 @@ export default function InvoiceListPage() {
 
   const [totalCount, setTotalCount] = useState([]);
 
-  console.log(myData, 'sdass');
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState('new');
@@ -233,7 +234,6 @@ export default function InvoiceListPage() {
 
   const handleResetFilter = () => {
     setFilterName('');
-    // setFilterStatus('new');
     setFilterService('all');
     setFilterEndDate(null);
     setFilterStartDate(null);
@@ -258,39 +258,6 @@ export default function InvoiceListPage() {
   useEffect(() => {
     fetch.run();
   }, [tab]);
-
-  // console.log('sda', myData);
-
-  // async function getData() {
-  //   getOrderData();
-  //   setInterval(async () => {
-  //     getOrderData();
-  //   }, 5000);
-  // }
-
-  // async function getOrderData() {
-  //   console.log('getOrderDataInvoice');
-  //   console.log('TAB', tab);
-  //   await axiosInstance
-  //     .get(`/orders?status=${tab?.value}`)
-  //     .then((response) => {
-  //       setMyData(response?.data?.orders || []);
-  //       setTotalCount(response?.data?.total_count || []);
-  //       if (localStorage.getItem('total') < response.data.orders.length) {
-  //         enqueueSnackbar(`Шинэ захиалга ирлээ`, {
-  //           variant: 'success',
-  //         });
-  //         localStorage.setItem('total', response.data.orders.length);
-  //       }
-  //       setTotal(response?.data?.orders?.length || 0);
-
-  //     })
-  //     .catch((error) => {
-  //       enqueueSnackbar(error?.response?.data?.message ? error?.response?.data?.message : `Алдаа гарлаа`, {
-  //         variant: 'warning',
-  //       });
-  //     });
-  // }
 
   return (
     <>

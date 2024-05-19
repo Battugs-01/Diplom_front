@@ -34,16 +34,8 @@ InvoiceTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function InvoiceTableRow({
-  row,
-  selected,
-  onSelectRow,
-  onViewRow,
-  onEditRow,
-  onDeleteRow,
-}) {
-
-  console.log(row , 'Ulmaa');
+export default function InvoiceTableRow({ row, selected, onSelectRow, onViewRow, onEditRow, onDeleteRow }) {
+  console.log(row, 'Ulmaa');
   const { sent, invoiceNumber, createDate, dueDate, priority, invoiceTo, totalPrice } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -85,8 +77,7 @@ export default function InvoiceTableRow({
 
         <TableCell align="left">{row?.user?.phone}</TableCell>
 
-        <TableCell align="left">{fDateTimeSuffix(row?.createdAt)}</TableCell> 
-
+        <TableCell align="left">{fDateTimeSuffix(row?.createdAt)}</TableCell>
 
         <TableCell align="left">{row?.location || 'null'}</TableCell>
 
@@ -105,23 +96,22 @@ export default function InvoiceTableRow({
               'default'
             }
           >
-            {row?.priority || 'null'}
+            {row?.priority || 'Тодорхойлж байна'}
           </Label>
+        </TableCell>
+
+        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+          {row?.driver?.name || 'Тодорхойлж байна'}
         </TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
-        </TableCell> 
+        </TableCell>
       </TableRow>
 
-      <MenuPopover
-        open={openPopover}
-        onClose={handleClosePopover}
-        arrow="right-top"
-        sx={{ width: 160 }}
-      >
+      <MenuPopover open={openPopover} onClose={handleClosePopover} arrow="right-top" sx={{ width: 160 }}>
         <MenuItem
           onClick={() => {
             onViewRow();

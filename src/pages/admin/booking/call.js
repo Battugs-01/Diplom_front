@@ -171,10 +171,10 @@ export default function BookingPage() {
                   markers: markers,
                   status: status,
                   ssid: SSID,
-                  passenger_lat: drivers[0]?.driver?.latitude || 0,
-                  passenger_lon: drivers[0]?.driver?.longitude || 0,
-                  dest_latitude: drivers[0]?.customer_latitude || 0,
-                  dest_longitude: drivers[0]?.customer_longitude || 0,
+                  passenger_lat: 47.9176274 || 0,
+                  passenger_lon: 106.8827759 || 0,
+                  dest_latitude: 47.9207426 || 0,
+                  dest_longitude: 106.9636219 || 0,
                 }}
                 handleOnSaddress={handleOnSetSaddress}
                 handleOnDaddress={handleOnSetDaddress}

@@ -69,7 +69,7 @@ const TABLE_HEAD = [
   { id: 'description', label: 'Биеийн байдал', align: 'left', width: 140 },
   { id: 'status', label: 'Түвшин', align: 'left' },
   { id: 'status', label: 'Хувиарласан жолооч', align: 'left', width: 140 },
-  { id: 'status', label: 'Хувиарласан эмч', align: 'left', width: 140 },
+  // { id: 'status', label: 'Хувиарласан эмч', align: 'left', width: 140 },
   { id: '' },
 ];
 
@@ -425,6 +425,7 @@ export default function InvoiceListPage() {
                       !loaderState && row ? (
                         <InvoiceTableRow
                           key={index}
+                          tab={tab}
                           row={row}
                           selected={selected.includes(row.id)}
                           onSelectRow={() => onSelectRow(row.id)}

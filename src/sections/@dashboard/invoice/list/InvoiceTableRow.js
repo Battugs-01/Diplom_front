@@ -34,7 +34,7 @@ InvoiceTableRow.propTypes = {
   onSelectRow: PropTypes.func,
 };
 
-export default function InvoiceTableRow({ row, selected, onSelectRow, onViewRow, onEditRow, onDeleteRow }) {
+export default function InvoiceTableRow({ row, selected, onSelectRow, onViewRow, onEditRow, onDeleteRow, tab }) {
   console.log(row, 'Ulmaa');
   const { sent, invoiceNumber, createDate, dueDate, priority, invoiceTo, totalPrice } = row;
 
@@ -89,14 +89,14 @@ export default function InvoiceTableRow({ row, selected, onSelectRow, onViewRow,
           <Label
             variant="soft"
             color={
-              (priority === 'medium' && 'success') ||
-              (priority === 'high' && 'warning') ||
-              (priority === 'critical' && 'error') ||
-              (priority === 'low' && 'error') ||
+              (tab === 'medium' && 'success') ||
+              (tab.value === 'going' && 'success') ||
+              (tab === 'critical' && 'error') ||
+              (tab === 'low' && 'error') ||
               'default'
             }
           >
-            {row?.priority || 'Тодорхойлж байна'}
+            {tab.value === 'new' ? 'Тодорхойлж байна' : 'high'}
           </Label>
         </TableCell>
 
